@@ -116,6 +116,56 @@ function renderRightPanel(tasks) {
             })
             .catch(err => console.error(err));
     }
+
+    // 4. Fetch Recommended Projects
+    const recProjContainer = document.getElementById('recommended-projects-container');
+    const recProjEmpty = document.getElementById('recommended-projects-empty');
+    if (recProjContainer) {
+        fetch('/api/projects/')
+            .then(res => res.json())
+            .then(data => {
+                recProjContainer.innerHTML = '';
+                const allProjects = data.projects || [];
+                const activeIds = cachedProjects.map(cp => cp.id);
+                const recommendations = allProjects.filter(p => !activeIds.includes(p.id)).slice(0, 3);
+                
+                if (recommendations.length === 0) {
+                    recProjEmpty.style.display = 'block';
+                } else {
+                    recProjEmpty.style.display = 'none';
+                    recommendations.forEach(p => {
+                        const item = document.createElement('div');
+                        item.className = 'rec-project-item';
+                        item.style.marginBottom = '16px';
+                        item.style.display = 'flex';
+                        item.style.flexDirection = 'column';
+                        item.style.gap = '4px';
+                        
+                        let skillsHTML = '';
+                        (p.skills || []).slice(0, 2).forEach(s => {
+                            skillsHTML += `<span class="badge badge-skill" style="font-size: 9px; padding: 2px 6px; margin-right: 4px;">${escapeHTML(s)}</span>`;
+                        });
+                        
+                        item.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <a href="/project/${p.id}/" style="font-weight:700; font-size:13px; hover:underline; color:var(--text-main);">${escapeHTML(p.title)}</a>
+                                <span style="font-size:10px; color:var(--text-light);">👥 ${p.members_count}</span>
+                            </div>
+                            <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">by @${escapeHTML(p.creator.username)}</div>
+                            <div style="margin-top: 4px; display:flex; justify-content:space-between; align-items:center;">
+                                <div>${skillsHTML}</div>
+                                <a href="/project/${p.id}/" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 10px;">Details</a>
+                            </div>
+                        `;
+                        recProjContainer.appendChild(item);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                recProjEmpty.style.display = 'block';
+            });
+    }
 }
 
 function triggerDashboardSearch(query) {

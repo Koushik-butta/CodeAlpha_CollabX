@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{% if post %}Edit Post{% else %}Create Post{% endif %} - CollabX{% endblock %}
+{% block title %}{% if post %}Edit Pitch{% else %}Pitch Your Idea{% endif %} - CollabX{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -16,14 +16,30 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
     padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .composer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--grad-primary);
   }
   .composer-title {
     font-size: 28px;
     font-weight: 800;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
     background: var(--grad-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  .composer-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
   }
   .post-type-selector {
     display: grid;
@@ -46,14 +62,14 @@
   }
   .type-option-label:hover {
     border-color: var(--primary-indigo);
-    background: rgba(79, 70, 229, 0.02);
+    background: rgba(255, 107, 53, 0.02);
   }
   .type-option-label input {
     margin-bottom: 4px;
   }
   .type-option-label.selected {
     border-color: var(--primary-indigo);
-    background: rgba(79, 70, 229, 0.05);
+    background: rgba(255, 107, 53, 0.05);
     box-shadow: 0 0 0 1px var(--primary-indigo);
   }
   .type-tag-desc {
@@ -68,25 +84,28 @@
 <div class="composer-wrapper">
   <div class="composer-card">
     <h1 class="composer-title" id="composer-header-title">
-      {% if post %}Edit Your Need{% else %}Share a Collaboration Need{% endif %}
+      {% if post %}Edit Your Project Pitch{% else %}Pitch Your Idea{% endif %}
     </h1>
+    <p class="composer-subtitle">
+      Share your vision, describe open roles, list required technologies, and recruit co-builders.
+    </p>
     
     <form id="post-composer-form">
       <!-- Post Type Radio Toggle -->
       <div class="form-group">
-        <label class="form-label">What do you need?</label>
+        <label class="form-label">Pitch Category</label>
         <div class="post-type-selector">
           
           <label class="type-option-label {% if not post or post.post_type == 'recruitment' %}selected{% endif %}" id="label-type-recruitment">
             <input type="radio" name="post_type" value="recruitment" {% if not post or post.post_type == 'recruitment' %}checked{% endif %} id="radio-recruitment">
-            <div>Project Recruitment</div>
-            <span class="type-tag-desc">Find long-term contributors for side projects</span>
+            <div>🚀 Startup / Project Idea</div>
+            <span class="type-tag-desc">Pitch a side project or startup idea looking for builders</span>
           </label>
           
           <label class="type-option-label {% if post.post_type == 'hackathon' %}selected{% endif %}" id="label-type-hackathon">
             <input type="radio" name="post_type" value="hackathon" {% if post.post_type == 'hackathon' %}checked{% endif %} id="radio-hackathon">
-            <div>Hackathon Team</div>
-            <span class="type-tag-desc">Recruit builders for a specific upcoming hackathon</span>
+            <div>🏆 Hackathon Sprint</div>
+            <span class="type-tag-desc">Find teammates for a specific upcoming hackathon</span>
           </label>
           
         </div>
@@ -94,26 +113,26 @@
       
       <!-- Post Title -->
       <div class="form-group">
-        <label for="post-title" class="form-label">Post Title</label>
-        <input type="text" id="post-title" class="form-input" placeholder="e.g. Need: 2 MERN Developers / SIH Team Needed" value="{% if post %}{{ post.title }}{% endif %}" required>
+        <label for="post-title" class="form-label">Idea / Pitch Headline</label>
+        <input type="text" id="post-title" class="form-input" placeholder="e.g. AI-powered Resume Parser for startup builders / NASA Apps team needed" value="{% if post %}{{ post.title }}{% endif %}" required>
       </div>
       
       <!-- Post Description -->
       <div class="form-group">
-        <label for="post-description" class="form-label">Project Description & Requirements</label>
-        <textarea id="post-description" class="form-input" rows="6" placeholder="Provide details about your project, the hackathon context, your progress, and who you are looking to recruit..." required>{% if post %}{{ post.description }}{% endif %}</textarea>
+        <label for="post-description" class="form-label">Idea Details & Target Teammate Specifications</label>
+        <textarea id="post-description" class="form-input" rows="6" placeholder="Describe the problem, your proposed solution, target milestone, and the specific skill set needed (e.g. Frontend developer with CSS skills, ML developer familiar with LLMs)..." required>{% if post %}{{ post.description }}{% endif %}</textarea>
       </div>
       
       <!-- Post Required Skills -->
       <div class="form-group">
-        <label for="post-skills" class="form-label">Required Skills (Comma-separated)</label>
-        <input type="text" id="post-skills" class="form-input" placeholder="e.g. React, Node.js, Python, Figma" value="{% for s in post.skills_list %}{{ s }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+        <label for="post-skills" class="form-label">Required Technologies (Comma-separated)</label>
+        <input type="text" id="post-skills" class="form-input" placeholder="e.g. React, Python, PyTorch, Figma, PostgreSQL" value="{% for s in post.skills_list %}{{ s }}{% if not forloop.last %}, {% endif %}{% endfor %}">
       </div>
       
       <div style="display: flex; gap: 16px; margin-top: 32px;">
         <button type="button" class="btn btn-secondary" onclick="window.history.back()" style="flex: 1;">Cancel</button>
         <button type="submit" class="btn btn-primary" style="flex: 2;" id="btn-composer-submit">
-          {% if post %}Save Post{% else %}Publish Post{% endif %}
+          {% if post %}Save Pitch{% else %}Launch Project Idea{% endif %}
         </button>
       </div>
     </form>

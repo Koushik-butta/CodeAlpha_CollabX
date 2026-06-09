@@ -1,86 +1,112 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}CollabX - Hackathons, Team Building and Project Collaboration{% endblock %}
+{% block title %}CollabX - Find Teammates. Build Projects. Win Hackathons.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/landing.css' %}">
 {% endblock %}
 
 {% block content %}
-<!-- Large Hero Banner Section -->
+<!-- Immersive Hero Section -->
 <section class="hero-section">
-  <div class="container">
+  <!-- Decorative Background Glows -->
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <!-- Floating Animation Elements -->
+  <div class="floating-wrapper">
+    <!-- Code Snippet -->
+    <div class="floating-element float-code" style="top: 15%; left: 8%;">
+      <span class="float-tag">&lt;/&gt;</span>
+      <span class="float-text">npm run dev</span>
+    </div>
+    <!-- Team Avatar -->
+    <div class="floating-element float-avatar" style="top: 20%; right: 12%;">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Avatar">
+      <div class="active-dot"></div>
+    </div>
+    <!-- Rocket Icon -->
+    <div class="floating-element float-rocket" style="bottom: 25%; left: 10%;">
+      🚀 <span class="float-lbl">Deploying...</span>
+    </div>
+    <!-- Idea Bulb -->
+    <div class="floating-element float-bulb" style="top: 55%; right: 15%;">
+      💡 <span class="float-lbl">Pitch Idea</span>
+    </div>
+    <!-- Floating Project Card -->
+    <div class="floating-element float-card" style="bottom: 15%; right: 8%;">
+      <div class="float-card-header">
+        <span class="card-dot"></span>
+        <strong>AI Chatbot</strong>
+      </div>
+      <div class="float-card-body">
+        <span>ML &bull; Python</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container hero-container">
     <div class="hero-badge">
-      <span>🚀</span> Energetic Innovation &amp; Open Source Platform
+      <span class="badge-icon">⚡</span>
+      <span>Find Teammates. Build Projects. Win Hackathons.</span>
     </div>
     
-    <h1 class="hero-title" id="landing-title">
-      Build Together.<br><span>Innovate Faster.</span>
+    <h1 class="hero-title">
+      Build Amazing Projects<br>
+      <span class="gradient-text text-typewrite">Together.</span>
     </h1>
     
-    <p class="hero-subtitle" id="landing-subtitle">
-      Discover hackathons, find your dream project teammates, recruit skilled builders, and collaborate to turn ideas into real products.
+    <p class="hero-subtitle">
+      Find teammates, join hackathons, collaborate on ideas and launch your next big project.
     </p>
     
     <div class="hero-ctas">
-      <a href="{% url 'register' %}" class="btn btn-primary" id="btn-hero-start">Launch Your Team</a>
-      <a href="{% url 'discover_developers' %}" class="btn btn-secondary" id="btn-hero-explore">Browse Teammates</a>
+      <a href="{% url 'register' %}" class="btn btn-primary" id="btn-hero-start">
+        Find Teammates <span style="margin-left:4px;">➔</span>
+      </a>
+      <a href="{% url 'register' %}" class="btn btn-secondary" id="btn-hero-explore">
+        Explore Projects
+      </a>
     </div>
 
-    <!-- Hackathon & Collaboration Vector Graphic -->
-    <div class="hero-visual-illustration">
-      <svg viewBox="0 0 800 350" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 650px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));">
-        <rect width="800" height="350" rx="20" fill="#131B31" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
-        
-        <!-- Grid Background Mockup -->
-        <path d="M 0,50 L 800,50 M 0,100 L 800,100 M 0,150 L 800,150 M 0,200 L 800,200 M 0,250 L 800,250 M 0,300 L 800,300" stroke="rgba(255,255,255,0.02)"/>
-        <path d="M 100,0 L 100,350 M 200,0 L 200,350 M 300,0 L 300,350 M 400,0 L 400,350 M 500,0 L 500,350 M 600,0 L 600,350 M 700,0 L 700,350" stroke="rgba(255,255,255,0.02)"/>
-        
-        <!-- Connection Network Paths -->
-        <path d="M 150,220 C 300,80 500,80 650,220" stroke="#ff6b35" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4" />
-        <path d="M 280,240 C 350,140 450,140 520,240" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4" />
-        
-        <!-- Central Hub Node (Idea/AI) -->
-        <circle cx="400" cy="110" r="32" fill="#1e293b" stroke="#ff6b35" stroke-width="3"/>
-        <!-- Lightbulb glow inside central node -->
-        <path d="M 400,95 L 400,125 M 385,110 L 415,110 M 390,100 L 410,120 M 390,120 L 410,100" stroke="#ff6b35" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="400" cy="110" r="14" fill="#ff6b35"/>
-        
-        <!-- Node 1: Front-end (React/UI) -->
-        <g transform="translate(150, 220)">
-          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#2563eb" stroke-width="2"/>
-          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">UI/UX</text>
-        </g>
-        
-        <!-- Node 2: Back-end (Django/Database) -->
-        <g transform="translate(280, 240)">
-          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
-          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">Python</text>
-        </g>
-
-        <!-- Node 3: AI Engine -->
-        <g transform="translate(520, 240)">
-          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#ff6b35" stroke-width="2"/>
-          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">AI/ML</text>
-        </g>
-
-        <!-- Node 4: Product Manager -->
-        <g transform="translate(650, 220)">
-          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#2563eb" stroke-width="2"/>
-          <text x="0" y="5" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">PM</text>
-        </g>
-        
-        <!-- Collaborative Team Vectors (Mock avatars/avatars cards) -->
-        <rect x="310" y="25" width="180" height="40" rx="8" fill="#1e293b" stroke="rgba(255,255,255,0.06)" />
-        <circle cx="335" cy="45" r="12" fill="#ff6b35" />
-        <text x="335" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">A</text>
-        <circle cx="355" cy="45" r="12" fill="#2563eb" />
-        <text x="355" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">J</text>
-        <circle cx="375" cy="45" r="12" fill="#10b981" />
-        <text x="375" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">K</text>
-        <text x="435" y="49" font-family="sans-serif" font-size="12" fill="#94a3b8" font-weight="500">forming team...</text>
-      </svg>
+    <!-- Collaborative Visual Dashboard Preview -->
+    <div class="hero-mockup-wrapper">
+      <div class="mockup-header">
+        <div class="mockup-buttons">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="mockup-address">collabx.dev/hackathon-workspace</div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-sidebar">
+          <div class="mockup-item active">🏠 Workspace</div>
+          <div class="mockup-item">📋 Kanban Board</div>
+          <div class="mockup-item">💬 Team Chat</div>
+          <div class="mockup-item">📁 Files</div>
+        </div>
+        <div class="mockup-content">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="font-weight:700; font-size:15px;">Smart India Hackathon Workspace</div>
+            <span class="badge" style="background:#10B98120; color:#10B981; border:1px solid #10B98140; font-size:11px;">Status: In Progress</span>
+          </div>
+          <div class="mockup-grid">
+            <div class="mockup-card">
+              <div class="mockup-card-title">Todo</div>
+              <div class="mockup-ticket">Configure Postgres DB</div>
+              <div class="mockup-ticket">Figma Wireframes</div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-title">In Progress</div>
+              <div class="mockup-ticket" style="border-left-color: var(--primary-indigo);">Integrate OpenAI API</div>
+            </div>
+            <div class="mockup-card">
+              <div class="mockup-card-title">Completed</div>
+              <div class="mockup-ticket" style="border-left-color: var(--accent-cyan); text-decoration:line-through; opacity:0.6;">Repo Setup</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -90,207 +116,597 @@
   <div class="container">
     <div class="stats-grid">
       <div class="stat-item">
-        <span class="stat-num">1,000+</span>
-        <span class="stat-label">Collaborators</span>
+        <span class="stat-num">1,200+</span>
+        <span class="stat-label">Developers</span>
       </div>
       <div class="stat-item">
-        <span class="stat-num">500+</span>
-        <span class="stat-label">Active Projects</span>
+        <span class="stat-num">450+</span>
+        <span class="stat-label">Projects Launched</span>
       </div>
       <div class="stat-item">
-        <span class="stat-num">100+</span>
+        <span class="stat-num">80+</span>
         <span class="stat-label">Hackathons Supported</span>
       </div>
       <div class="stat-item">
-        <span class="stat-num">50+</span>
-        <span class="stat-label">Developer Skills</span>
+        <span class="stat-num">₹15L+</span>
+        <span class="stat-label">Total Prize Pools</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Trending Projects Section -->
+<!-- Dream Team Section -->
 <section class="landing-section">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Trending <span>Recruitment Needs</span></h2>
-      <p class="section-subtitle">Real project workspaces looking for dev skills right now</p>
+      <h2 class="section-title">Find Your <span>Dream Team</span></h2>
+      <p class="section-subtitle">Recruit specialized builders instantly matching your tech stack</p>
     </div>
     
-    <div class="landing-grid-3">
-      <!-- Project Card 1 -->
-      <div class="landing-card">
-        <span class="card-badge">HACKATHON TEAM</span>
-        <h3 class="card-title">AI Resume Parser</h3>
-        <p class="card-desc">Building a smart resume ranking service. We need a backend Django engineer to parse documents and index them in Postgres.</p>
-        <div style="margin-top: 20px; display: flex; gap: 6px;">
-          <span class="badge badge-skill" style="font-size: 10px;">Python</span>
-          <span class="badge badge-skill" style="font-size: 10px;">Django</span>
-          <span class="badge badge-skill" style="font-size: 10px;">PostgreSQL</span>
+    <div class="dream-team-grid">
+      <!-- Frontend Dev Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">🎨</div>
+          <span class="badge badge-skill">Frontend Developer</span>
+        </div>
+        <div class="dream-count">184 available members</div>
+        <p class="dream-desc">Specialists in building responsive user interfaces, modular dashboards, and animations.</p>
+        <div class="dream-tech">
+          <span>React</span><span>Vue.js</span><span>Tailwind CSS</span><span>TypeScript</span>
         </div>
       </div>
-      
-      <!-- Project Card 2 -->
-      <div class="landing-card">
-        <span class="card-badge" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">OPEN SOURCE</span>
-        <h3 class="card-title">Dev Workspace board</h3>
-        <p class="card-desc">React-based collaborative kanban board with real-time sync. Looking for a Frontend dev to build drag-and-drop mechanics.</p>
-        <div style="margin-top: 20px; display: flex; gap: 6px;">
-          <span class="badge badge-skill" style="font-size: 10px;">React</span>
-          <span class="badge badge-skill" style="font-size: 10px;">TypeScript</span>
-          <span class="badge badge-skill" style="font-size: 10px;">CSS Grid</span>
+
+      <!-- Backend Dev Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">⚙️</div>
+          <span class="badge badge-skill" style="color:var(--primary-purple); background:rgba(37, 99, 235, 0.1);">Backend Developer</span>
+        </div>
+        <div class="dream-count">212 available members</div>
+        <p class="dream-desc">Experts in designing scalable REST APIs, authentication middleware, and database schemas.</p>
+        <div class="dream-tech">
+          <span>Python</span><span>Django</span><span>Node.js</span><span>PostgreSQL</span>
         </div>
       </div>
-      
-      <!-- Project Card 3 -->
-      <div class="landing-card">
-        <span class="card-badge">STUDENT INITIATIVE</span>
-        <h3 class="card-title">Mockup UI Generator</h3>
-        <p class="card-desc">AI-powered system generating UI elements from text descriptions. Seeking UI/UX designers to define core brand guidelines.</p>
-        <div style="margin-top: 20px; display: flex; gap: 6px;">
-          <span class="badge badge-skill" style="font-size: 10px;">Figma</span>
-          <span class="badge badge-skill" style="font-size: 10px;">CSS</span>
-          <span class="badge badge-skill" style="font-size: 10px;">Tailwind</span>
+
+      <!-- Full Stack Dev Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">💻</div>
+          <span class="badge badge-skill" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">Full Stack Developer</span>
+        </div>
+        <div class="dream-count">304 available members</div>
+        <p class="dream-desc">Versatile coders managing both frontend layouts and backend server deployment pipelines.</p>
+        <div class="dream-tech">
+          <span>Next.js</span><span>Express</span><span>MongoDB</span><span>Docker</span>
+        </div>
+      </div>
+
+      <!-- AI/ML Engineer Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">🧠</div>
+          <span class="badge badge-skill">AI/ML Engineer</span>
+        </div>
+        <div class="dream-count">96 available members</div>
+        <p class="dream-desc">Researchers focused on large language models, computer vision pipeline, and AI tools.</p>
+        <div class="dream-tech">
+          <span>PyTorch</span><span>TensorFlow</span><span>HuggingFace</span><span>OpenAI API</span>
+        </div>
+      </div>
+
+      <!-- UI/UX Designer Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">✨</div>
+          <span class="badge badge-skill" style="color:var(--primary-purple); background:rgba(37, 99, 235, 0.1);">UI/UX Designer</span>
+        </div>
+        <div class="dream-count">74 available members</div>
+        <p class="dream-desc">Creative designers drafting Figma wireframes, flowcharts, user journeys, and style guides.</p>
+        <div class="dream-tech">
+          <span>Figma</span><span>Adobe XD</span><span>Prototyping</span><span>Design Systems</span>
+        </div>
+      </div>
+
+      <!-- Mobile Developer Card -->
+      <div class="dream-card">
+        <div class="dream-header">
+          <div class="dream-icon">📱</div>
+          <span class="badge badge-skill" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">Mobile Developer</span>
+        </div>
+        <div class="dream-count">115 available members</div>
+        <p class="dream-desc">Engineers writing native or cross-platform iOS and Android mobile software setups.</p>
+        <div class="dream-tech">
+          <span>Flutter</span><span>React Native</span><span>Swift</span><span>Kotlin</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Featured Developers Section -->
+<!-- Skill Constellation Section -->
+<section class="landing-section constellation-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Interactive <span>Skill Constellation</span></h2>
+      <p class="section-subtitle">Hover over the nodes to see how different skills connect to form cross-functional teams</p>
+    </div>
+
+    <div class="constellation-container">
+      <svg class="constellation-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Connecting network paths -->
+        <g class="constellation-lines">
+          <!-- Python connections -->
+          <line x1="150" y1="200" x2="300" y2="100" />
+          <line x1="150" y1="200" x2="400" y2="280" />
+          <!-- React connections -->
+          <line x1="300" y1="100" x2="500" y2="100" />
+          <line x1="300" y1="100" x2="650" y2="200" />
+          <!-- AI/ML connections -->
+          <line x1="400" y1="280" x2="300" y2="100" />
+          <line x1="400" y1="280" x2="550" y2="300" />
+          <line x1="400" y1="280" x2="150" y2="200" />
+          <!-- Django connections -->
+          <line x1="300" y1="100" x2="300" y2="250" />
+          <line x1="300" y1="250" x2="150" y2="200" />
+          <!-- Nodejs connections -->
+          <line x1="500" y1="100" x2="550" y2="300" />
+          <line x1="500" y1="100" x2="300" y2="250" />
+          <!-- UI/UX connections -->
+          <line x1="650" y1="200" x2="500" y2="100" />
+          <!-- Cloud connections -->
+          <line x1="550" y1="300" x2="650" y2="200" />
+          <!-- Java connections -->
+          <line x1="220" y1="320" x2="150" y2="200" />
+          <line x1="220" y1="320" x2="300" y2="250" />
+        </g>
+
+        <!-- Skill Nodes -->
+        <g class="constellation-nodes">
+          <!-- Python -->
+          <g class="node-group" transform="translate(150, 200)" data-connections="React, Django, AI/ML, Java">
+            <circle class="node-glow" r="28" fill="rgba(255, 107, 53, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#FF6B35" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">Python</text>
+          </g>
+          <!-- React -->
+          <g class="node-group" transform="translate(300, 100)" data-connections="Python, Node.js, UI/UX, AI/ML, Django">
+            <circle class="node-glow" r="28" fill="rgba(37, 99, 235, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#2563EB" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">React</text>
+          </g>
+          <!-- Django -->
+          <g class="node-group" transform="translate(300, 250)" data-connections="Python, React, Node.js, Java">
+            <circle class="node-glow" r="28" fill="rgba(16, 185, 129, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#10B981" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">Django</text>
+          </g>
+          <!-- Node.js -->
+          <g class="node-group" transform="translate(500, 100)" data-connections="React, Django, Cloud, UI/UX">
+            <circle class="node-glow" r="28" fill="rgba(37, 99, 235, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#2563EB" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">Node.js</text>
+          </g>
+          <!-- AI/ML -->
+          <g class="node-group" transform="translate(400, 280)" data-connections="Python, React, Cloud">
+            <circle class="node-glow" r="28" fill="rgba(255, 107, 53, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#FF6B35" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">AI/ML</text>
+          </g>
+          <!-- UI/UX -->
+          <g class="node-group" transform="translate(650, 200)" data-connections="React, Node.js, Cloud">
+            <circle class="node-glow" r="28" fill="rgba(16, 185, 129, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#10B981" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">UI/UX</text>
+          </g>
+          <!-- Cloud -->
+          <g class="node-group" transform="translate(550, 300)" data-connections="AI/ML, UI/UX, Node.js">
+            <circle class="node-glow" r="28" fill="rgba(255, 107, 53, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#FF6B35" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">Cloud</text>
+          </g>
+          <!-- Java -->
+          <g class="node-group" transform="translate(220, 320)" data-connections="Python, Django">
+            <circle class="node-glow" r="28" fill="rgba(37, 99, 235, 0.15)"></circle>
+            <circle class="node-core" r="20" fill="#131B31" stroke="#2563EB" stroke-width="2.5"></circle>
+            <text class="node-label" y="5">Java</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Trending Hackathons Section -->
 <section class="landing-section" style="background: rgba(19, 27, 49, 0.3);">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Featured <span>Innovators</span></h2>
-      <p class="section-subtitle">Meet talented students, developers, and designers on CollabX</p>
+      <h2 class="section-title">Trending <span>Hackathons</span></h2>
+      <p class="section-subtitle">Join active hackathon sprints. Find teammates before countdown expires.</p>
     </div>
     
     <div class="landing-grid-3">
-      <!-- Developer 1 -->
-      <div class="landing-card">
-        <div class="dev-avatar-row">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 1">
-          <div>
-            <div class="dev-name">Alex Dev</div>
-            <div class="dev-role">Full Stack Developer</div>
+      <!-- Smart India Hackathon -->
+      <div class="event-card">
+        <div class="event-glow"></div>
+        <div class="event-header">
+          <span class="event-status status-hiring">Hiring Teammates</span>
+          <span class="event-type">SIH 2026</span>
+        </div>
+        <h3 class="event-title">Smart India Hackathon</h3>
+        <p class="event-desc">The premier national student innovation challenge. Form teams on CollabX to address problem statements issued by government ministries.</p>
+        
+        <!-- Live Countdown Timer -->
+        <div class="countdown-wrapper" data-deadline="2026-10-12T00:00:00Z">
+          <div class="countdown-unit">
+            <span class="count-num cd-days">00</span>
+            <span class="count-label">Days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-hours">00</span>
+            <span class="count-label">Hrs</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-min">00</span>
+            <span class="count-label">Mins</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-sec">00</span>
+            <span class="count-label">Secs</span>
           </div>
         </div>
-        <p class="card-desc">"Love building automation scripts. Specializes in Django backend architecture and cloud deployment pipelines."</p>
-        <div style="margin-top: 16px;">
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Python</span>
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Postgres</span>
-          <span class="badge badge-skill" style="font-size: 9.5px;">Docker</span>
+
+        <div class="event-meta">
+          <div class="meta-item"><span>👥 Max Team:</span> <strong>6 Members</strong></div>
+          <div class="meta-item"><span>🏆 Prize Pool:</span> <strong style="color:var(--accent-cyan);">₹1,00,000</strong></div>
         </div>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-sm" style="width:100%; margin-top:16px;">Form Team</a>
       </div>
 
-      <!-- Developer 2 -->
-      <div class="landing-card">
-        <div class="dev-avatar-row">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 2">
-          <div>
-            <div class="dev-name">Jane Designer</div>
-            <div class="dev-role">UI/UX Designer</div>
+      <!-- NASA Space Apps Challenge -->
+      <div class="event-card">
+        <div class="event-glow" style="background:radial-gradient(circle at 100% 0%, rgba(37,99,235,0.15), transparent 60%);"></div>
+        <div class="event-header">
+          <span class="event-status status-hiring" style="color:var(--primary-purple); border-color:var(--primary-purple); background:rgba(37,99,235,0.08);">Hiring Teammates</span>
+          <span class="event-type">NASA 2026</span>
+        </div>
+        <h3 class="event-title">NASA Space Apps</h3>
+        <p class="event-desc">Collaborative global hackathon address science, space and earth challenges using open database vectors. Connect to build telemetry mockups.</p>
+        
+        <!-- Live Countdown Timer -->
+        <div class="countdown-wrapper" data-deadline="2026-10-04T00:00:00Z">
+          <div class="countdown-unit">
+            <span class="count-num cd-days">00</span>
+            <span class="count-label">Days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-hours">00</span>
+            <span class="count-label">Hrs</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-min">00</span>
+            <span class="count-label">Mins</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-sec">00</span>
+            <span class="count-label">Secs</span>
           </div>
         </div>
-        <p class="card-desc">"Crafting modern design layouts. Enjoys styling dashboards with glassmorphism overlays and CSS keyframe animations."</p>
-        <div style="margin-top: 16px;">
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Figma</span>
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">CSS Grid</span>
-          <span class="badge badge-skill" style="font-size: 9.5px;">Prototyping</span>
+
+        <div class="event-meta">
+          <div class="meta-item"><span>👥 Max Team:</span> <strong>4 Members</strong></div>
+          <div class="meta-item"><span>🏆 Prize Pool:</span> <strong style="color:var(--accent-cyan);">$5,000 Global</strong></div>
         </div>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-sm" style="width:100%; margin-top:16px;">Form Team</a>
       </div>
 
-      <!-- Developer 3 -->
-      <div class="landing-card">
-        <div class="dev-avatar-row">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 3">
-          <div>
-            <div class="dev-name">Koushik Butta</div>
-            <div class="dev-role">AI/ML Engineer</div>
+      <!-- Open Source Winter Build -->
+      <div class="event-card">
+        <div class="event-glow" style="background:radial-gradient(circle at 100% 0%, rgba(16,185,129,0.15), transparent 60%);"></div>
+        <div class="event-header">
+          <span class="event-status status-coming">Coming Soon</span>
+          <span class="event-type">OSWB 2026</span>
+        </div>
+        <h3 class="event-title">Open Source Build</h3>
+        <p class="event-desc">A month-long virtual build sprint connecting global developers to open source tasks, tools, and incubation opportunities.</p>
+        
+        <!-- Live Countdown Timer -->
+        <div class="countdown-wrapper" data-deadline="2026-12-01T00:00:00Z">
+          <div class="countdown-unit">
+            <span class="count-num cd-days">00</span>
+            <span class="count-label">Days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-hours">00</span>
+            <span class="count-label">Hrs</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-min">00</span>
+            <span class="count-label">Mins</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="count-num cd-sec">00</span>
+            <span class="count-label">Secs</span>
           </div>
         </div>
-        <p class="card-desc">"Training deep learning setups. Interested in natural language processing models and web search tools optimizations."</p>
-        <div style="margin-top: 16px;">
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">PyTorch</span>
-          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">NLP</span>
-          <span class="badge badge-skill" style="font-size: 9.5px;">FastAPI</span>
+
+        <div class="event-meta">
+          <div class="meta-item"><span>👥 Max Team:</span> <strong>Flexible</strong></div>
+          <div class="meta-item"><span>🏆 Prize Pool:</span> <strong style="color:var(--accent-cyan);">Developer Stipend</strong></div>
         </div>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-sm" style="width:100%; margin-top:16px;">Form Team</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Upcoming Hackathons Section -->
+<!-- Developer Showcase Section -->
 <section class="landing-section">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Upcoming <span>Hackathons &amp; Events</span></h2>
-      <p class="section-subtitle">Find teammates and apply for active team recruitment events</p>
+      <h2 class="section-title">Developer <span>Showcase</span></h2>
+      <p class="section-subtitle">Top contributors launching workspace sprints and assisting teams</p>
     </div>
-    
-    <div class="landing-grid-2">
-      <!-- Hackathon 1 -->
-      <div class="landing-card" style="border-left: 4px solid var(--primary-indigo);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-          <h3 style="font-size: 20px; font-weight: 800;">Smart India Hackathon 2026</h3>
-          <span class="badge badge-skill" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">Registering</span>
+
+    <div class="landing-grid-3">
+      <!-- Showcase 1 -->
+      <div class="github-profile-card">
+        <div class="gh-header">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Alex Dev" class="gh-avatar">
+          <div class="gh-meta">
+            <h3 class="gh-name">Alex Dev</h3>
+            <span class="gh-role">Full Stack Developer</span>
+            <span class="gh-college">IIT Bombay</span>
+          </div>
         </div>
-        <p class="card-desc">The premier national student innovation challenge. Form your teams on CollabX to address problem statements issued by government ministries.</p>
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 13px; color: var(--text-light);">Starts: Oct 12, 2026</span>
-          <a href="{% url 'register' %}" class="btn btn-secondary btn-sm">Find Team</a>
+        <p class="gh-bio">Specializing in Django backend architecture, Docker containers, and cloud deployment pipelines.</p>
+        <div class="gh-skills">
+          <span>Python</span><span>PostgreSQL</span><span>Docker</span><span>Django</span>
+        </div>
+        <div class="gh-stats">
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">12</span>
+            <span class="gh-stat-lbl">Projects Built</span>
+          </div>
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">342</span>
+            <span class="gh-stat-lbl">Followers</span>
+          </div>
+        </div>
+        <div class="gh-activity-grid">
+          <!-- Green mock commit boxes representing active development -->
+          <span style="opacity:0.2;"></span><span style="opacity:0.6;"></span><span style="opacity:0.9;"></span><span style="opacity:0.3;"></span>
+          <span style="opacity:0.8;"></span><span style="opacity:0.2;"></span><span style="opacity:0.9;"></span><span style="opacity:0.7;"></span>
+          <span style="opacity:0.4;"></span><span style="opacity:0.9;"></span><span style="opacity:0.3;"></span><span style="opacity:0.9;"></span>
+          <span style="opacity:0.9;"></span><span style="opacity:0.5;"></span><span style="opacity:0.9;"></span><span style="opacity:0.8;"></span>
         </div>
       </div>
 
-      <!-- Hackathon 2 -->
-      <div class="landing-card" style="border-left: 4px solid var(--primary-purple);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-          <h3 style="font-size: 20px; font-weight: 800;">Open Source Winter Build</h3>
-          <span class="badge badge-skill" style="color:var(--primary-indigo); background:rgba(255,107,53,0.1);">Coming Soon</span>
+      <!-- Showcase 2 -->
+      <div class="github-profile-card">
+        <div class="gh-header">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120" alt="Jane Designer" class="gh-avatar">
+          <div class="gh-meta">
+            <h3 class="gh-name">Jane Designer</h3>
+            <span class="gh-role">UI/UX Designer</span>
+            <span class="gh-college">NID Delhi</span>
+          </div>
         </div>
-        <p class="card-desc">A month-long virtual build sprint connecting global developers to open source projects. Join active workspace hubs and share scripts.</p>
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 13px; color: var(--text-light);">Starts: Dec 01, 2026</span>
-          <a href="{% url 'register' %}" class="btn btn-secondary btn-sm">Find Team</a>
+        <p class="gh-bio">Crafting design systems in Figma, interactive dashboard wireframes, and smooth micro-animations.</p>
+        <div class="gh-skills">
+          <span>Figma</span><span>CSS Grid</span><span>Adobe XD</span><span>CSS Keyframes</span>
+        </div>
+        <div class="gh-stats">
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">8</span>
+            <span class="gh-stat-lbl">Projects Built</span>
+          </div>
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">284</span>
+            <span class="gh-stat-lbl">Followers</span>
+          </div>
+        </div>
+        <div class="gh-activity-grid">
+          <span style="opacity:0.9;"></span><span style="opacity:0.3;"></span><span style="opacity:0.6;"></span><span style="opacity:0.9;"></span>
+          <span style="opacity:0.2;"></span><span style="opacity:0.8;"></span><span style="opacity:0.9;"></span><span style="opacity:0.3;"></span>
+          <span style="opacity:0.9;"></span><span style="opacity:0.7;"></span><span style="opacity:0.4;"></span><span style="opacity:0.9;"></span>
+          <span style="opacity:0.8;"></span><span style="opacity:0.9;"></span><span style="opacity:0.5;"></span><span style="opacity:0.9;"></span>
+        </div>
+      </div>
+
+      <!-- Showcase 3 -->
+      <div class="github-profile-card">
+        <div class="gh-header">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120" alt="Koushik Butta" class="gh-avatar">
+          <div class="gh-meta">
+            <h3 class="gh-name">Koushik Butta</h3>
+            <span class="gh-role">AI/ML Engineer</span>
+            <span class="gh-college">VIT Vellore</span>
+          </div>
+        </div>
+        <p class="gh-bio">Training PyTorch layers, optimization scripts, NLP language loaders, and web search integrations.</p>
+        <div class="gh-skills">
+          <span>PyTorch</span><span>NLP</span><span>FastAPI</span><span>Python</span>
+        </div>
+        <div class="gh-stats">
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">15</span>
+            <span class="gh-stat-lbl">Projects Built</span>
+          </div>
+          <div class="gh-stat-item">
+            <span class="gh-stat-val">412</span>
+            <span class="gh-stat-lbl">Followers</span>
+          </div>
+        </div>
+        <div class="gh-activity-grid">
+          <span style="opacity:0.4;"></span><span style="opacity:0.9;"></span><span style="opacity:0.8;"></span><span style="opacity:0.9;"></span>
+          <span style="opacity:0.9;"></span><span style="opacity:0.2;"></span><span style="opacity:0.9;"></span><span style="opacity:0.6;"></span>
+          <span style="opacity:0.9;"></span><span style="opacity:0.3;"></span><span style="opacity:0.9;"></span><span style="opacity:0.7;"></span>
+          <span style="opacity:0.5;"></span><span style="opacity:0.9;"></span><span style="opacity:0.9;"></span><span style="opacity:0.8;"></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Success Stories Section -->
+<!-- Collaboration Journey Section -->
 <section class="landing-section" style="background: rgba(19, 27, 49, 0.3); border-bottom: 1px solid var(--border-light);">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Developer <span>Success Stories</span></h2>
-      <p class="section-subtitle">Read how students built team sprint systems and won hackathons</p>
+      <h2 class="section-title">Collaboration <span>Journey</span></h2>
+      <p class="section-subtitle">How builders utilize CollabX workspace pipelines to achieve goals</p>
     </div>
-    
-    <div class="landing-grid-2">
-      <!-- Success 1 -->
-      <div class="landing-card success-card">
-        <div>
-          <h3 class="card-title">First Place at NASA Space Apps</h3>
-          <p class="card-desc">A team of four strangers connected on CollabX, launched a dedicated project workspace, utilized the Kanban board sprint, and designed a web dashboard that won regional first place.</p>
-        </div>
-        <div class="success-quote">
-          "The workspace chat, file upload manager, and tasks tracking kept us sync'd through 48 hours of pure coding. CollabX is a hacker superpower."
-          <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--text-main);">— Rahul K., NASA Team Lead</div>
-        </div>
+
+    <div class="journey-flow">
+      <!-- Step 1 -->
+      <div class="journey-step">
+        <div class="step-num-bubble">01</div>
+        <div class="step-icon-wrapper">💡</div>
+        <h4 class="step-title">Pitch Idea</h4>
+        <p class="step-desc">Publish your startup, AI tool, or hackathon project problem statement on the feed.</p>
       </div>
 
-      <!-- Success 2 -->
-      <div class="landing-card success-card">
-        <div>
-          <h3 class="card-title">From Side-Project to Seed Funding</h3>
-          <p class="card-desc">Two students looking for an AI/ML developer connected with a researcher on the discovery directory. They organized their project workspaces and successfully raised pre-seed incubation support.</p>
-        </div>
-        <div class="success-quote">
-          "We easily found developers filtering by specific AI skills. CollabX connects builders instantly based on trust."
-          <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--text-main);">— Priya S., Co-founder</div>
-        </div>
+      <!-- Arrow -->
+      <div class="journey-arrow">➔</div>
+
+      <!-- Step 2 -->
+      <div class="journey-step">
+        <div class="step-num-bubble">02</div>
+        <div class="step-icon-wrapper">👥</div>
+        <h4 class="step-title">Team Formation</h4>
+        <p class="step-desc">Filter talented contributors by coding skills and accept applications.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="journey-arrow">➔</div>
+
+      <!-- Step 3 -->
+      <div class="journey-step">
+        <div class="step-num-bubble">03</div>
+        <div class="step-icon-wrapper">⚙️</div>
+        <h4 class="step-title">Develop</h4>
+        <p class="step-desc">Use the command center and Kanban workspace to assign, track, and sync tasks.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="journey-arrow">➔</div>
+
+      <!-- Step 4 -->
+      <div class="journey-step">
+        <div class="step-num-bubble">04</div>
+        <div class="step-icon-wrapper">🚀</div>
+        <h4 class="step-title">Submission</h4>
+        <p class="step-desc">Deploy your repository assets, compile production bundles, and submit.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div class="journey-arrow">➔</div>
+
+      <!-- Step 5 -->
+      <div class="journey-step">
+        <div class="step-num-bubble">05</div>
+        <div class="step-icon-wrapper">🏆</div>
+        <h4 class="step-title">Success</h4>
+        <p class="step-desc">Win hackathons, receive incubator funding, and launch open source packages.</p>
       </div>
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Live Countdown Timer Logic
+    const timers = document.querySelectorAll('.countdown-wrapper');
+    
+    function updateCountdowns() {
+      const now = new Date().getTime();
+      
+      timers.forEach(timer => {
+        const deadlineStr = timer.getAttribute('data-deadline');
+        const deadline = new Date(deadlineStr).getTime();
+        const distance = deadline - now;
+        
+        const daysEl = timer.querySelector('.cd-days');
+        const hoursEl = timer.querySelector('.cd-hours');
+        const minEl = timer.querySelector('.cd-min');
+        const secEl = timer.querySelector('.cd-sec');
+        
+        if (distance < 0) {
+          if (daysEl) daysEl.textContent = '00';
+          if (hoursEl) hoursEl.textContent = '00';
+          if (minEl) minEl.textContent = '00';
+          if (secEl) secEl.textContent = '00';
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if (minEl) minEl.textContent = String(minutes).padStart(2, '0');
+        if (secEl) secEl.textContent = String(seconds).padStart(2, '0');
+      });
+    }
+    
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+
+    // 2. Skill Constellation Hover Connect Logic
+    const nodes = document.querySelectorAll('.constellation-svg .node-group');
+    const lines = document.querySelectorAll('.constellation-svg .constellation-lines line');
+    
+    nodes.forEach(node => {
+      node.addEventListener('mouseenter', () => {
+        const textLabel = node.querySelector('.node-label').textContent.trim();
+        node.querySelector('.node-glow').style.r = '36';
+        node.querySelector('.node-core').style.strokeWidth = '4';
+        
+        // Find links originating or ending near this node
+        // Coordinates mapping
+        const matrix = node.getAttribute('transform');
+        const match = /translate\(\s*([0-9.-]+)\s*,\s*([0-9.-]+)\s*\)/.exec(matrix);
+        if (match) {
+          const cx = parseFloat(match[1]);
+          const cy = parseFloat(match[2]);
+          
+          lines.forEach(line => {
+            const x1 = parseFloat(line.getAttribute('x1'));
+            const y1 = parseFloat(line.getAttribute('y1'));
+            const x2 = parseFloat(line.getAttribute('x2'));
+            const y2 = parseFloat(line.getAttribute('y2'));
+            
+            // Check closeness to node center
+            const nearStart = Math.abs(x1 - cx) < 5 && Math.abs(y1 - cy) < 5;
+            const nearEnd = Math.abs(x2 - cx) < 5 && Math.abs(y2 - cy) < 5;
+            
+            if (nearStart || nearEnd) {
+              line.style.stroke = 'var(--primary-indigo)';
+              line.style.strokeWidth = '2';
+              line.style.opacity = '1';
+            } else {
+              line.style.opacity = '0.1';
+            }
+          });
+        }
+      });
+      
+      node.addEventListener('mouseleave', () => {
+        node.querySelector('.node-glow').style.r = '28';
+        node.querySelector('.node-core').style.strokeWidth = '2.5';
+        
+        lines.forEach(line => {
+          line.style.stroke = 'rgba(255, 255, 255, 0.04)';
+          line.style.strokeWidth = '1';
+          line.style.opacity = '1';
+        });
+      });
+    });
+  });
+</script>
 {% endblock %}

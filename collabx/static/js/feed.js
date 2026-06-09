@@ -87,11 +87,56 @@ function createPostCard(post) {
   const formattedType = post.post_type === 'recruitment' ? 'Project Recruitment' : 'Hackathon Team';
   const typeClass = post.post_type === 'recruitment' ? 'badge-recruitment' : 'badge-hackathon';
   
+  // Sniff content for colorful role badges
+  let roleBadgesHTML = '';
+  const searchStr = (post.title + ' ' + post.description + ' ' + post.skills.join(' ')).toLowerCase();
+  
+  if (post.post_type === 'recruitment') {
+    if (searchStr.includes('react') || searchStr.includes('frontend') || searchStr.includes('ui/ux') || searchStr.includes('js') || searchStr.includes('css') || searchStr.includes('html')) {
+      roleBadgesHTML += `<span class="badge badge-role role-frontend" style="background:#2563EB20; color:#2563EB; border:1px solid #2563EB40; margin-right:4px; font-size:11px;">Looking For Frontend</span>`;
+    }
+    if (searchStr.includes('backend') || searchStr.includes('django') || searchStr.includes('node') || searchStr.includes('python') || searchStr.includes('api') || searchStr.includes('postgres') || searchStr.includes('sql')) {
+      roleBadgesHTML += `<span class="badge badge-role role-backend" style="background:#FF6B3520; color:#FF6B35; border:1px solid #FF6B3540; margin-right:4px; font-size:11px;">Looking For Backend</span>`;
+    }
+    if (searchStr.includes('figma') || searchStr.includes('design') || searchStr.includes('designer') || searchStr.includes('ui') || searchStr.includes('ux')) {
+      roleBadgesHTML += `<span class="badge badge-role role-designer" style="background:#10B98120; color:#10B981; border:1px solid #10B98140; margin-right:4px; font-size:11px;">Looking For Designer</span>`;
+    }
+    if (searchStr.includes('ai') || searchStr.includes('ml') || searchStr.includes('pytorch') || searchStr.includes('tensorflow') || searchStr.includes('nlp') || searchStr.includes('model') || searchStr.includes('deep learning')) {
+      roleBadgesHTML += `<span class="badge badge-role role-ai" style="background:#8B5CF620; color:#8B5CF6; border:1px solid #8B5CF640; margin-right:4px; font-size:11px;">Looking For AI Engineer</span>`;
+    }
+    if (!roleBadgesHTML) {
+      roleBadgesHTML = `<span class="badge badge-role role-builder" style="background:#3B82F620; color:#3B82F6; border:1px solid #3B82F640; margin-right:4px; font-size:11px;">Looking For Builders</span>`;
+    }
+  }
+
   // Build skills badges HTML
   let skillsHTML = '';
   post.skills.forEach(skill => {
     skillsHTML += `<span class="badge badge-skill">${skill}</span>`;
   });
+
+  // Simulated project metrics based on post ID
+  const simulatedTeamSize = (post.id % 3) + 2; 
+  const simulatedTargetSize = (post.id % 2 === 0) ? 4 : 5;
+  const simulatedOpenPositions = Math.max(1, simulatedTargetSize - simulatedTeamSize);
+  const statusBadgeHTML = `<span class="badge badge-skill" style="font-size:10px; background:#10B98115; color:#10B981; border:1px solid #10B98130; padding:2px 8px;">Hiring</span>`;
+
+  const metaGridHTML = post.post_type === 'recruitment' ? `
+    <div class="recruitment-meta-grid">
+      <div>
+        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Team Size</div>
+        <div style="font-size:13px; font-weight:700; margin-top:2px;">👥 ${simulatedTeamSize}/${simulatedTargetSize} members</div>
+      </div>
+      <div>
+        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Open Positions</div>
+        <div style="font-size:13px; font-weight:700; margin-top:2px; color:var(--accent-cyan);">🎯 ${simulatedOpenPositions} vacancy</div>
+      </div>
+      <div>
+        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Project Status</div>
+        <div style="font-size:13px; font-weight:700; margin-top:2px; color:var(--status-success);">${statusBadgeHTML}</div>
+      </div>
+    </div>
+  ` : '';
 
   // Follow button logic
   let followButtonHTML = '';
@@ -127,11 +172,17 @@ function createPostCard(post) {
       </div>
     </div>
     
+    <div class="post-role-badges">
+      ${roleBadgesHTML}
+    </div>
+    
     <a href="/post/${post.id}/">
       <h3 class="post-title">${post.title}</h3>
     </a>
     
     <p class="post-desc">${post.description}</p>
+    
+    ${metaGridHTML}
     
     <div class="post-skills-section">
       ${skillsHTML}
