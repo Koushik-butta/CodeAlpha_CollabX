@@ -1,0 +1,30 @@
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+ENV/
+env/
+
+# Environment configurations containing keys
+.env
+.env.local
+.env.production
+.env.development
+
+# Databases
+db.sqlite3
+*.db
+
+# Django local static / uploads if any
+media/
+staticfiles/
+
+# IDE / editors settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

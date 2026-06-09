@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CollabX - Connect. Collaborate. Create.{% endblock %}</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="CollabX is the social networking and team building platform for developers, students, innovators, and hackathon teams to recruit and connect.">
+  
+  <!-- CSS Stylesheets -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="main-navbar">
+    <div class="container navbar-inner">
+      <a href="{% url 'landing' %}" class="logo" id="nav-logo">
+        Collab<span class="logo-cyan">X</span>
+      </a>
+      
+      {% if user.is_authenticated %}
+        <div class="nav-links">
+          <a href="{% url 'home_feed' %}" class="nav-link {% if request.resolver_match.url_name == 'home_feed' %}active{% endif %}" id="nav-link-feed">Home Feed</a>
+          <a href="{% url 'profile_self' %}" class="nav-link {% if request.resolver_match.url_name == 'profile_self' %}active{% endif %}" id="nav-link-profile">My Profile</a>
+          <a href="{% url 'create_post' %}" class="nav-link {% if request.resolver_match.url_name == 'create_post' %}active{% endif %}" id="nav-link-create">Create Post</a>
+        </div>
+        
+        <div class="nav-actions">
+          <a href="{% url 'profile_self' %}" id="nav-avatar-link">
+            <img src="{{ user.profile.profile_picture }}" alt="{{ user.username }}" class="avatar" id="nav-user-avatar">
+          </a>
+          <a href="{% url 'api_logout' %}" class="btn btn-secondary btn-sm" id="nav-btn-logout">Logout</a>
+        </div>
+      {% else %}
+        <div class="nav-links">
+          <a href="{% url 'landing' %}#features" class="nav-link">Features</a>
+        </div>
+        
+        <div class="nav-actions">
+          <a href="{% url 'login' %}" class="btn btn-secondary btn-sm" id="nav-btn-login">Login</a>
+          <a href="{% url 'register' %}" class="btn btn-primary btn-sm" id="nav-btn-register">Sign Up</a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- Main Body Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Shared Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 CollabX - Connect. Collaborate. Create. All rights reserved.</p>
+      <p style="font-size: 12px; margin-top: 8px; color: var(--text-light);">Designed for Hackers, Students, and Builders.</p>
+    </div>
+  </footer>
+
+  <!-- Javascript Modules -->
+  <script src="{% static 'js/global.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

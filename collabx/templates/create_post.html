@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if post %}Edit Post{% else %}Create Post{% endif %} - CollabX{% endblock %}
+
+{% block extra_css %}
+<style>
+  .composer-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+  .composer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+  }
+  .composer-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .post-type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .type-option-label {
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+  }
+  .type-option-label:hover {
+    border-color: var(--primary-indigo);
+    background: rgba(79, 70, 229, 0.02);
+  }
+  .type-option-label input {
+    margin-bottom: 4px;
+  }
+  .type-option-label.selected {
+    border-color: var(--primary-indigo);
+    background: rgba(79, 70, 229, 0.05);
+    box-shadow: 0 0 0 1px var(--primary-indigo);
+  }
+  .type-tag-desc {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="composer-wrapper">
+  <div class="composer-card">
+    <h1 class="composer-title" id="composer-header-title">
+      {% if post %}Edit Your Need{% else %}Share a Collaboration Need{% endif %}
+    </h1>
+    
+    <form id="post-composer-form">
+      <!-- Post Type Radio Toggle -->
+      <div class="form-group">
+        <label class="form-label">What do you need?</label>
+        <div class="post-type-selector">
+          
+          <label class="type-option-label {% if not post or post.post_type == 'recruitment' %}selected{% endif %}" id="label-type-recruitment">
+            <input type="radio" name="post_type" value="recruitment" {% if not post or post.post_type == 'recruitment' %}checked{% endif %} id="radio-recruitment">
+            <div>Project Recruitment</div>
+            <span class="type-tag-desc">Find long-term contributors for side projects</span>
+          </label>
+          
+          <label class="type-option-label {% if post.post_type == 'hackathon' %}selected{% endif %}" id="label-type-hackathon">
+            <input type="radio" name="post_type" value="hackathon" {% if post.post_type == 'hackathon' %}checked{% endif %} id="radio-hackathon">
+            <div>Hackathon Team</div>
+            <span class="type-tag-desc">Recruit builders for a specific upcoming hackathon</span>
+          </label>
+          
+        </div>
+      </div>
+      
+      <!-- Post Title -->
+      <div class="form-group">
+        <label for="post-title" class="form-label">Post Title</label>
+        <input type="text" id="post-title" class="form-input" placeholder="e.g. Need: 2 MERN Developers / SIH Team Needed" value="{% if post %}{{ post.title }}{% endif %}" required>
+      </div>
+      
+      <!-- Post Description -->
+      <div class="form-group">
+        <label for="post-description" class="form-label">Project Description & Requirements</label>
+        <textarea id="post-description" class="form-input" rows="6" placeholder="Provide details about your project, the hackathon context, your progress, and who you are looking to recruit..." required>{% if post %}{{ post.description }}{% endif %}</textarea>
+      </div>
+      
+      <!-- Post Required Skills -->
+      <div class="form-group">
+        <label for="post-skills" class="form-label">Required Skills (Comma-separated)</label>
+        <input type="text" id="post-skills" class="form-input" placeholder="e.g. React, Node.js, Python, Figma" value="{% for s in post.skills_list %}{{ s }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+      </div>
+      
+      <div style="display: flex; gap: 16px; margin-top: 32px;">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()" style="flex: 1;">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="flex: 2;" id="btn-composer-submit">
+          {% if post %}Save Post{% else %}Publish Post{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Expose post id if editing
+  const EDITING_POST_ID = {% if post %}{{ post.id }}{% else %}null{% endif %};
+</script>
+<script src="{% static 'js/create-post.js' %}"></script>
+{% endblock %}

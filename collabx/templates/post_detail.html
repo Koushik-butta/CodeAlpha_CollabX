@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Post Details - CollabX{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/feed.css' %}"> <!-- Reuse feed components -->
+<style>
+  .details-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+  
+  .details-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 24px;
+  }
+
+  /* Comments area styling */
+  .comments-section-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .comment-composer {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .comment-composer textarea {
+    flex-grow: 1;
+    resize: vertical;
+    border-radius: var(--radius-md);
+  }
+
+  .comments-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .comment-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    background: var(--bg-main);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+  }
+
+  .comment-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .comment-author-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .comment-author-name {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .comment-content {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="details-wrapper">
+  
+  <!-- Main Post Details Card -->
+  <article class="card details-card" id="post-details-card">
+    <div class="post-header">
+      <div class="post-author-info">
+        <a href="" id="author-profile-link">
+          <img src="" alt="" class="avatar" id="author-avatar-img">
+        </a>
+        <div class="post-author-meta">
+          <a href="" class="post-author-name" id="author-name-lbl"></a>
+          <div class="post-time-meta">
+            <span id="post-date-lbl"></span>
+            <span>&bull;</span>
+            <span id="post-college-lbl" style="font-weight: 500;"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span class="post-type-badge" id="post-type-badge"></span>
+        <button class="btn btn-secondary btn-sm" id="post-follow-author-btn" style="display: none;"></button>
+      </div>
+    </div>
+    
+    <h1 class="post-title" id="post-title-lbl" style="font-size: 26px; line-height: 1.25; margin-bottom: 16px;"></h1>
+    
+    <p class="post-desc" id="post-desc-lbl" style="font-size: 15px; line-height: 1.6; margin-bottom: 24px;"></p>
+    
+    <div class="post-skills-section" id="post-skills-container">
+      <!-- JS-injected required skill badges -->
+    </div>
+    
+    <!-- Likes and Action buttons -->
+    <div class="post-actions" style="margin-bottom: 0;">
+      <button class="post-action-btn" id="post-like-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span>Like (<span id="post-likes-count">0</span>)</span>
+      </button>
+      
+      <!-- Edit / Delete actions for Author only -->
+      <div id="author-actions-container" style="display: none; margin-left: auto; gap: 8px;">
+        <button class="btn btn-secondary btn-sm" id="btn-edit-post">Edit</button>
+        <button class="btn btn-secondary btn-sm" id="btn-delete-post" style="border-color: rgba(239, 68, 68, 0.3); color: var(--status-error);">Delete</button>
+      </div>
+    </div>
+  </article>
+  
+  <!-- Comments Section -->
+  <section class="card details-card" style="padding-top: 24px;">
+    <h3 class="comments-section-title">Discussion (<span id="post-comments-count">0</span>)</h3>
+    
+    <!-- Comment Box -->
+    <form id="comment-composer-form" class="comment-composer">
+      <img src="{{ user.profile.profile_picture }}" alt="{{ user.username }}" class="avatar">
+      <div style="display: flex; flex-direction: column; flex-grow: 1; gap: 12px;">
+        <textarea id="comment-input" class="form-input" rows="3" placeholder="Ask a question or offer to collaborate..." required></textarea>
+        <button type="submit" class="btn btn-primary btn-sm" style="align-self: flex-end;" id="btn-comment-submit">Post Comment</button>
+      </div>
+    </form>
+    
+    <!-- Comments List -->
+    <div class="comments-timeline" id="post-comments-container">
+      <!-- JS-injected comments -->
+      <div class="empty-feed" style="padding: 20px 0;">
+        <p class="empty-feed-desc">No comments yet. Start the conversation!</p>
+      </div>
+    </div>
+  </section>
+  
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const POST_ID = "{{ post.id }}";
+</script>
+<script src="{% static 'js/post-detail.js' %}"></script>
+{% endblock %}

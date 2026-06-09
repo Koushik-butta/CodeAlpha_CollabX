@@ -1,0 +1,192 @@
+/* Auth Forms Styling */
+
+.auth-wrapper {
+  min-height: calc(100vh - 70px - 165px); /* viewport minus nav & footer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 20px 40px rgba(15, 23, 42, 0.04);
+  padding: 40px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Password field wrapper for eye icon */
+.password-field-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field-container .form-input {
+  padding-right: 48px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+.password-toggle-btn:hover {
+  color: var(--text-muted);
+}
+
+/* Remember me and forgot password layout */
+.auth-utilities {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+
+.remember-me-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-muted);
+}
+
+.remember-me-container input {
+  cursor: pointer;
+}
+
+.forgot-password-link {
+  color: var(--primary-indigo);
+  font-weight: 500;
+}
+.forgot-password-link:hover {
+  color: var(--primary-indigo-hover);
+  text-decoration: underline;
+}
+
+.auth-btn-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* Divider for Social Auth */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-light);
+}
+.auth-divider:not(:empty)::before {
+  margin-right: 16px;
+}
+.auth-divider:not(:empty)::after {
+  margin-left: 16px;
+}
+
+/* Social Buttons */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btn-social {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+}
+
+.btn-github-auth {
+  background: #24292e;
+  color: #ffffff;
+  border: 1px solid #24292e;
+}
+.btn-github-auth:hover {
+  background: #1b1f23;
+  box-shadow: 0 4px 12px rgba(36, 41, 46, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-google-auth {
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid var(--border-light);
+}
+.btn-google-auth:hover {
+  background: #f9fafb;
+  border-color: rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.social-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  object-fit: contain;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.auth-footer a {
+  color: var(--primary-indigo);
+  font-weight: 600;
+}
+.auth-footer a:hover {
+  text-decoration: underline;
+}

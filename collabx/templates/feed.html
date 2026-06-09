@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home Feed - CollabX{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="feed-grid">
+    
+    <!-- LEFT SIDEBAR: Current User Summary -->
+    <aside class="feed-sidebar">
+      <div class="card widget-profile">
+        <div class="widget-profile-bg"></div>
+        <img src="{{ profile.profile_picture }}" alt="{{ user.username }}" class="widget-profile-avatar" id="sidebar-avatar">
+        
+        <h3 class="widget-profile-name" id="sidebar-name">{{ profile.full_name }}</h3>
+        <p class="widget-profile-username">@{{ user.username }}</p>
+        
+        <p class="widget-profile-bio" id="sidebar-bio">
+          {% if profile.bio %}{{ profile.bio }}{% else %}No bio written yet. Click profile to edit!{% endif %}
+        </p>
+        
+        <div class="widget-profile-stats">
+          <div style="border-right: 1px solid var(--border-light);">
+            <div class="widget-stat-val" id="sidebar-followers-count">0</div>
+            <div class="widget-stat-lbl">Followers</div>
+          </div>
+          <div>
+            <div class="widget-stat-val" id="sidebar-following-count">0</div>
+            <div class="widget-stat-lbl">Following</div>
+          </div>
+        </div>
+        
+        <a href="{% url 'profile_self' %}" class="btn btn-secondary btn-sm" style="width: calc(100% - 16px); margin-top: 16px;">View Full Profile</a>
+      </div>
+    </aside>
+    
+    <!-- MIDDLE PANEL: Posts Feed -->
+    <section class="feed-main-content">
+      <!-- Search & Filters Container -->
+      <div class="feed-search-container">
+        <div class="search-bar-wrapper">
+          <!-- Magnifying glass search icon -->
+          <svg class="search-icon-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="feed-search-input" class="form-input search-input" placeholder="Search by skill, username, or project name...">
+        </div>
+        
+        <div class="filter-bar">
+          <div class="filter-chips">
+            <button class="filter-chip active" data-type="all" id="filter-chip-all">All Posts</button>
+            <button class="filter-chip" data-type="recruitment" id="filter-chip-recruitment">Project Recruitment</button>
+            <button class="filter-chip" data-type="hackathon" id="filter-chip-hackathon">Hackathon Teams</button>
+          </div>
+          <span style="font-size: 13px; color: var(--text-light); font-weight: 500;" id="feed-results-count">Loading posts...</span>
+        </div>
+      </div>
+      
+      <!-- Quick Post Creator CTA -->
+      <div class="card feed-create-post-card" onclick="window.location.href='{% url 'create_post' %}'" id="feed-create-post-trigger">
+        <img src="{{ profile.profile_picture }}" alt="User avatar" class="avatar">
+        <div class="create-post-trigger-input">
+          Find teammates! Post a recruitment need or hackathon search...
+        </div>
+      </div>
+      
+      <!-- Dynamic Feed List -->
+      <div class="post-list" id="feed-posts-container">
+        <!-- JS-injected post cards -->
+        <div class="empty-feed">
+          <p class="empty-feed-title">Loading your feed...</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- RIGHT SIDEBAR: Suggestions & Trending -->
+    <aside class="feed-sidebar">
+      <!-- Suggested Developers -->
+      <div class="card">
+        <h3 class="sidebar-widget-title">Connect with Developers</h3>
+        <div class="widget-list" id="sidebar-suggestions-container">
+          <!-- JS-injected developers -->
+        </div>
+      </div>
+      
+      <!-- Trending Skills -->
+      <div class="card">
+        <h3 class="sidebar-widget-title">Trending Skills</h3>
+        <div class="widget-skills-cloud" id="sidebar-skills-container">
+          <!-- JS-injected skills -->
+        </div>
+      </div>
+    </aside>
+    
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/feed.js' %}"></script>
+{% endblock %}
