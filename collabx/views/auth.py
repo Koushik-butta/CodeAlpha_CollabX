@@ -108,19 +108,12 @@ def forgot_password_api(request):
         
         if not email:
             return JsonResponse({'message': 'Email field is required'}, status=400)
-            
-        user_exists = User.objects.filter(email=email).exists()
-        if not user_exists:
-            return JsonResponse({'message': 'If the email exists, a reset link will be sent.'}, status=200)
-            
-        # Log the reset link for development/testing
-        reset_link = f"http://localhost:8000/login/?reset_token=dev-test-token-1234&email={email}"
-        print(f"\n[DEV PASSWORD RESET] Password reset requested for {email}.")
-        print(f"[DEV PASSWORD RESET] Use link to mock reset: {reset_link}\n")
         
-        return JsonResponse({'message': 'If the email exists, a reset link will be sent.'})
+        # Always return same message to prevent user enumeration
+        return JsonResponse({'message': 'If this email is registered, a reset link will be sent.'})
     except Exception as e:
         return JsonResponse({'message': str(e)}, status=500)
+
 
 # ==========================================
 # GITHUB OAUTH AND FALLBACK
@@ -129,39 +122,12 @@ def forgot_password_api(request):
 def github_login(request):
     client_id = os.getenv('GITHUB_CLIENT_ID')
     
-    # Fallback to simulated login if keys are not set
     if not client_id:
-        # Create a mock GitHub developer user
-        mock_username = 'github_dev_mock'
-        user, created = User.objects.get_or_create(
-            username=mock_username,
-            defaults={
-                'email': 'github_dev_mock@example.com',
-                'first_name': 'Mock GitHub Dev'
-            }
-        )
-        if created:
-            user.set_unusable_password()
-            user.save()
-            
-        profile, p_created = Profile.objects.get_or_create(user=user)
-        profile.full_name = 'Mock GitHub Dev'
-        profile.github_username = 'bk-dev'
-        profile.github_link = 'https://github.com/bk-dev'
-        profile.github_repos_count = 24
-        profile.github_followers = 15
-        profile.github_following = 10
-        profile.github_connected = True
-        profile.profile_picture = 'https://res.cloudinary.com/dptujrmi1/image/upload/v1717838400/default-avatar.png'
-        profile.save()
-        
-        login(request, user)
-        request.session['oauth_simulated'] = True
-        return redirect('home_feed')
+        return redirect('/login/?error=github_not_configured')
         
     # Real OAuth Flow
-    redirect_uri = 'http://localhost:8000/auth/github/callback/'
-    github_url = f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=user"
+    redirect_uri = os.getenv('GITHUB_REDIRECT_URI', 'http://localhost:8000/auth/github/callback/')
+    github_url = f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=user:email"
     return redirect(github_url)
 
 def github_callback(request):
@@ -237,31 +203,11 @@ def github_callback(request):
 def google_login(request):
     client_id = os.getenv('GOOGLE_CLIENT_ID')
     
-    # Fallback to simulated login if keys are not set
     if not client_id:
-        # Create a mock Google developer user
-        mock_username = 'google_dev_mock'
-        user, created = User.objects.get_or_create(
-            username=mock_username,
-            defaults={
-                'email': 'google_dev_mock@example.com',
-                'first_name': 'Mock Google User'
-            }
-        )
-        if created:
-            user.set_unusable_password()
-            user.save()
-            
-        profile, p_created = Profile.objects.get_or_create(user=user)
-        profile.full_name = 'Mock Google User'
-        profile.save()
-        
-        login(request, user)
-        request.session['oauth_simulated'] = True
-        return redirect('home_feed')
+        return redirect('/login/?error=google_not_configured')
         
     # Real OAuth Flow
-    redirect_uri = 'http://localhost:8000/auth/google/callback/'
+    redirect_uri = os.getenv('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback/')
     google_url = (
         "https://accounts.google.com/o/oauth2/v2/auth?"
         f"client_id={client_id}&"

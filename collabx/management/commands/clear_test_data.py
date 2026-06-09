@@ -1,78 +1,81 @@
 """
-Management command: clear_test_data
+Management command: clear_fake_data
 
-Removes test/fake users, their posts, comments, likes, and follows.
-Preserves all real user accounts (those registered via actual email,
-GitHub OAuth, or Google OAuth).
+Removes all fake/mock/test users (github_dev_mock, google_dev_mock, testuser, etc.)
+and all their associated data (posts, comments, likes, follows, notifications).
+
+Preserves all real registered accounts.
 
 Usage:
-    python manage.py clear_test_data
-    python manage.py clear_test_data --dry-run      # Preview only
-    python manage.py clear_test_data --superuser    # Also delete superuser test accounts
+    python manage.py clear_fake_data              # Clears known fake accounts
+    python manage.py clear_fake_data --dry-run    # Preview only, no deletion
+    python manage.py clear_fake_data --usernames extra_user1 extra_user2
 """
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from collabx.models import Post, Comment, Like, Follow, Notification
 
 
-# Known test/fake usernames to remove
-TEST_USERNAMES = [
-    'testuser', 'test_user', 'demouser', 'demo', 'admin_test',
-    'fake_dev', 'sample', 'example_user', 'john_doe_test',
-    'jane_dev', 'hackathon_test', 'test123', 'dev_test',
+# Known fake/mock usernames created by the system (no real users)
+FAKE_USERNAMES = [
+    # OAuth mock fallbacks (removed from code, but may exist in DB)
+    'github_dev_mock',
+    'google_dev_mock',
+    # Common test names
+    'testuser', 'test_user', 'test123', 'demo', 'demouser',
+    'admin_test', 'fake_dev', 'sample', 'example_user',
+    'john_doe_test', 'jane_dev', 'hackathon_test',
     'alice_test', 'bob_test',
 ]
 
 
 class Command(BaseCommand):
-    help = 'Remove test accounts, posts, and dummy data. Keeps real user accounts.'
+    help = 'Remove all fake/mock/test accounts and their data from the database.'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--dry-run',
             action='store_true',
-            help='Preview what will be deleted without actually deleting.',
+            help='Preview deletions without executing.',
         )
         parser.add_argument(
             '--usernames',
             nargs='+',
             type=str,
-            help='Specific usernames to delete (in addition to defaults).',
+            help='Additional usernames to delete.',
         )
 
     def handle(self, *args, **options):
-        dry_run = options.get('dry_run', False)
-        extra_usernames = options.get('usernames') or []
+        dry_run       = options.get('dry_run', False)
+        extra_names   = options.get('usernames') or []
+        targets       = list(set(FAKE_USERNAMES + extra_names))
 
-        target_names = list(set(TEST_USERNAMES + extra_usernames))
+        to_delete = User.objects.filter(username__in=targets)
 
-        users_to_delete = User.objects.filter(username__in=target_names)
-
-        if not users_to_delete.exists():
-            self.stdout.write(self.style.WARNING(
-                'No test accounts found matching the target list. Database looks clean!'
+        if not to_delete.exists():
+            self.stdout.write(self.style.SUCCESS(
+                '✅ No fake accounts found. Database is clean!'
             ))
             return
 
-        self.stdout.write(f'\nFound {users_to_delete.count()} test account(s) to remove:')
-        for u in users_to_delete:
-            post_count = Post.objects.filter(author=u).count()
-            self.stdout.write(f'  - @{u.username} ({post_count} posts)')
+        self.stdout.write(f'\nFound {to_delete.count()} fake account(s):')
+        for u in to_delete:
+            posts = getattr(u, 'posts', None)
+            post_count = posts.count() if posts else 0
+            self.stdout.write(f'  [DEL] @{u.username}  ({post_count} posts, email: {u.email})')
 
         if dry_run:
             self.stdout.write(self.style.WARNING(
-                '\nDRY RUN mode — nothing deleted. Remove --dry-run to execute.'
+                '\n[DRY RUN] Nothing was deleted. Remove --dry-run to execute.'
             ))
             return
 
-        # Cascade delete: posts, comments, likes, follows, notifications
-        deleted_count = users_to_delete.count()
-        users_to_delete.delete()  # Cascade handles related objects
+        count = to_delete.count()
+        to_delete.delete()
 
         self.stdout.write(self.style.SUCCESS(
-            f'\n✅ Successfully removed {deleted_count} test account(s) and all related data.'
+            f'\n✅ Deleted {count} fake account(s) and all their data.'
         ))
         self.stdout.write(self.style.SUCCESS(
-            'The platform is now clean. Only real user accounts remain.'
+            'The platform now only contains real user accounts.'
         ))

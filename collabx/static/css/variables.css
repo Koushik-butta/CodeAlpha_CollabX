@@ -2,50 +2,70 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Palette - Hackathon Orange & Developer Blue with Success Green accents */
-  --primary-indigo: #ff6b35;
-  --primary-indigo-hover: #e0531e;
-  --primary-purple: #2563eb;
-  --primary-purple-hover: #1d4ed8;
+  /* =============================================
+     CollabX Color System — GitHub-inspired Dark
+     Clean, professional, developer-friendly
+     ============================================= */
+
+  /* Primary: Electric Violet / Purple */
+  --primary-indigo: #7c3aed;
+  --primary-indigo-hover: #6d28d9;
+
+  /* Accent: Teal / Cyan */
+  --primary-purple: #0ea5e9;
+  --primary-purple-hover: #0284c7;
+
+  /* Green accent */
   --accent-cyan: #10b981;
   --accent-cyan-hover: #059669;
   --accent-cyan-light: rgba(16, 185, 129, 0.15);
 
-  /* Gradients */
-  --grad-primary: linear-gradient(135deg, var(--primary-indigo) 0%, var(--primary-purple) 100%);
-  --grad-cyan-indigo: linear-gradient(135deg, var(--accent-cyan) 0%, var(--primary-indigo) 100%);
-  --grad-purple-cyan: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-cyan) 100%);
+  /* Orange accent (used sparingly) */
+  --accent-orange: #f97316;
 
-  /* Neutral Colors (Sleek Dark Hackathon theme) */
-  --bg-main: #0b1020;
-  --bg-card: #131b31;
-  --text-main: #f9fafb;
-  --text-muted: #94a3b8;
-  --text-light: #64748b;
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, #7c3aed 0%, #0ea5e9 100%);
+  --grad-cyan-indigo: linear-gradient(135deg, #10b981 0%, #7c3aed 100%);
+  --grad-purple-cyan: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+
+  /* =============================================
+     Backgrounds — Crisp GitHub-style dark
+     ============================================= */
+  --bg-main: #0d1117;      /* GitHub dark canvas */
+  --bg-card: #161b22;      /* GitHub card */
+  --bg-elevated: #21262d;  /* Elevated panel */
+
+  /* Text */
+  --text-main: #e6edf3;    /* GitHub primary text */
+  --text-muted: #8b949e;   /* GitHub muted text */
+  --text-light: #484f58;   /* GitHub light text */
+
+  /* Borders */
   --border-light: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(255, 107, 53, 0.4);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(124, 58, 237, 0.4);
 
   /* Status Colors */
-  --status-success: #10b981;
-  --status-error: #ef4444;
-  --status-warning: #f59e0b;
+  --status-success: #3fb950;   /* GitHub green */
+  --status-error: #f85149;     /* GitHub red */
+  --status-warning: #d29922;   /* GitHub yellow */
 
   /* Typography */
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Layout & Spacing */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-round: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.2);
 
   /* Transitions */
   --transition-fast: 0.15s ease;

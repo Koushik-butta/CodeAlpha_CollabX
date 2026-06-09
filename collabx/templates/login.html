@@ -84,4 +84,20 @@
 
 {% block extra_js %}
 <script src="{% static 'js/auth.js' %}"></script>
+<script>
+  // Show OAuth errors from URL params
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+    if (err === 'github_not_configured') {
+      showToast('GitHub OAuth is not configured. Please use email/password login.', 'error');
+    } else if (err === 'google_not_configured') {
+      showToast('Google OAuth is not configured. Please use email/password login.', 'error');
+    } else if (err === 'github_token_failed') {
+      showToast('GitHub login failed. Please try again.', 'error');
+    } else if (err === 'google_token_failed') {
+      showToast('Google login failed. Please try again.', 'error');
+    }
+  })();
+</script>
 {% endblock %}
