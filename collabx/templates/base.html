@@ -6,7 +6,7 @@
   <title>{% block title %}CollabX - Connect. Collaborate. Create.{% endblock %}</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="CollabX is the social networking and team building platform for developers, students, innovators, and hackathon teams to recruit and connect.">
+  <meta name="description" content="CollabX is the social platform for developers, hackathon participants, and builders to share projects, find teammates, and collaborate.">
   
   <!-- CSS Stylesheets -->
   {% load static %}
@@ -31,21 +31,36 @@
       
       {% if user.is_authenticated %}
         <div class="nav-links">
-          <a href="{% url 'home_feed' %}" class="nav-link {% if request.resolver_match.url_name == 'home_feed' %}active{% endif %}" id="nav-link-feed">Home Feed</a>
-          <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" id="nav-link-dashboard">Dashboard</a>
-          <a href="{% url 'discover_developers' %}" class="nav-link {% if request.resolver_match.url_name == 'discover_developers' %}active{% endif %}" id="nav-link-discover">Discover Devs</a>
-          <a href="{% url 'create_project' %}" class="nav-link {% if request.resolver_match.url_name == 'create_project' %}active{% endif %}" id="nav-link-project-create">Create Project</a>
-          <a href="{% url 'profile_self' %}" class="nav-link {% if request.resolver_match.url_name == 'profile_self' %}active{% endif %}" id="nav-link-profile">My Profile</a>
-          <a href="{% url 'notifications_page' %}" class="nav-link {% if request.resolver_match.url_name == 'notifications_page' %}active{% endif %}" id="nav-link-notifs">Notifications <span id="navbar-notif-badge" style="background:var(--status-error); color:white; border-radius:10px; padding:2px 6px; font-size:10px; display:none; margin-left:4px;">0</span></a>
+          <a href="{% url 'home_feed' %}" class="nav-link {% if request.resolver_match.url_name == 'home_feed' %}active{% endif %}" id="nav-link-feed">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Feed
+          </a>
+          <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" id="nav-link-dashboard">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a href="{% url 'discover_developers' %}" class="nav-link {% if request.resolver_match.url_name == 'discover_developers' %}active{% endif %}" id="nav-link-discover">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Explore
+          </a>
         </div>
         
-        <div class="nav-search" style="margin-left: auto; margin-right: 16px;">
-          <input type="text" id="navbar-search-input" placeholder="Search..." style="background: var(--bg-main); border: 1px solid var(--border-light); color: var(--text-main); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 14px; width: 180px; outline: none; transition: width 0.2s;" onkeydown="if(event.key === 'Enter') { window.location.href = '/dashboard/?search=' + encodeURIComponent(this.value); }">
+        <div class="nav-search">
+          <input type="text" id="navbar-search-input" placeholder="Search..."
+            onkeydown="if(event.key==='Enter'){window.location.href='/dashboard/?search='+encodeURIComponent(this.value);}">
         </div>
         
         <div class="nav-actions">
-          <a href="{% url 'profile_self' %}" id="nav-avatar-link">
-            <img src="{{ user.profile.profile_picture }}" alt="{{ user.username }}" class="avatar" id="nav-user-avatar">
+          <a href="{% url 'notifications_page' %}" class="nav-icon-btn {% if request.resolver_match.url_name == 'notifications_page' %}active{% endif %}" id="nav-notif-btn" title="Notifications">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span id="navbar-notif-badge" class="nav-badge" style="display:none;">0</span>
+          </a>
+          <a href="{% url 'profile_self' %}" class="nav-icon-btn" id="nav-avatar-link" title="{{ user.username }}">
+            <img src="{{ user.profile.profile_picture }}" alt="{{ user.username }}" class="nav-avatar" id="nav-user-avatar">
+          </a>
+          <a href="{% url 'create_post' %}" class="btn btn-primary btn-sm nav-post-btn" id="nav-new-post-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Post
           </a>
           <a href="{% url 'api_logout' %}" class="btn btn-secondary btn-sm" id="nav-btn-logout">Logout</a>
         </div>
@@ -53,7 +68,6 @@
         <div class="nav-links">
           <a href="{% url 'landing' %}#features" class="nav-link">Features</a>
         </div>
-        
         <div class="nav-actions">
           <a href="{% url 'login' %}" class="btn btn-secondary btn-sm" id="nav-btn-login">Login</a>
           <a href="{% url 'register' %}" class="btn btn-primary btn-sm" id="nav-btn-register">Sign Up</a>
@@ -67,11 +81,38 @@
     {% block content %}{% endblock %}
   </main>
 
+  <!-- Mobile Bottom Navigation Bar (auth users only) -->
+  {% if user.is_authenticated %}
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <a href="{% url 'home_feed' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'home_feed' %}active{% endif %}" id="mob-nav-feed">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="{% url 'discover_developers' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'discover_developers' %}active{% endif %}" id="mob-nav-explore">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Explore</span>
+    </a>
+    <a href="{% url 'create_post' %}" class="mobile-nav-item mobile-nav-create" id="mob-nav-create">
+      <div class="mobile-nav-create-btn">
+        <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+    </a>
+    <a href="{% url 'notifications_page' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'notifications_page' %}active{% endif %}" id="mob-nav-notifs" style="position:relative;">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span>Alerts</span>
+    </a>
+    <a href="{% url 'profile_self' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'profile_self' %}active{% endif %}" id="mob-nav-profile">
+      <img src="{{ user.profile.profile_picture }}" alt="{{ user.username }}" class="mob-nav-avatar">
+      <span>Profile</span>
+    </a>
+  </nav>
+  {% endif %}
+
   <!-- Shared Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2026 CollabX - Connect. Collaborate. Create. All rights reserved.</p>
-      <p style="font-size: 12px; margin-top: 8px; color: var(--text-light);">Designed for Hackers, Students, and Builders.</p>
+      <p>&copy; 2026 CollabX — Connect. Collaborate. Create.</p>
+      <p style="font-size: 12px; margin-top: 8px; color: var(--text-light);">Built for Developers, Hackers, and Builders.</p>
     </div>
   </footer>
 

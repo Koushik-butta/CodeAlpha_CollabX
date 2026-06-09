@@ -1,111 +1,147 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home Feed - CollabX{% endblock %}
+{% block title %}Home Feed — CollabX{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="feed-grid">
-    
-    <!-- LEFT SIDEBAR: Current User Summary -->
-    <aside class="feed-sidebar">
-      <div class="card widget-profile">
-        <div class="widget-profile-bg"></div>
-        <img src="{{ profile.profile_picture }}" alt="{{ user.username }}" class="widget-profile-avatar" id="sidebar-avatar">
-        
-        <h3 class="widget-profile-name" id="sidebar-name">{{ profile.full_name }}</h3>
-        <p class="widget-profile-username">@{{ user.username }}</p>
-        
-        <p class="widget-profile-bio" id="sidebar-bio">
-          {% if profile.bio %}{{ profile.bio }}{% else %}No bio written yet. Click profile to edit!{% endif %}
-        </p>
-        
-        <div class="widget-profile-stats">
-          <div style="border-right: 1px solid var(--border-light);">
-            <div class="widget-stat-val" id="sidebar-followers-count">0</div>
-            <div class="widget-stat-lbl">Followers</div>
+<div class="insta-feed-layout">
+
+  <!-- ===================== LEFT SIDEBAR ===================== -->
+  <aside class="insta-left-sidebar">
+    <div class="insta-profile-card">
+      <div class="insta-profile-cover"></div>
+      <a href="{% url 'profile_self' %}" class="insta-sidebar-avatar-link">
+        <img src="{{ profile.profile_picture }}" alt="{{ user.username }}" class="insta-sidebar-avatar" id="sidebar-avatar">
+      </a>
+      <div class="insta-profile-info">
+        <a href="{% url 'profile_self' %}" class="insta-sidebar-name" id="sidebar-name">{{ profile.full_name }}</a>
+        <span class="insta-sidebar-username">@{{ user.username }}</span>
+        <div class="insta-sidebar-stats">
+          <div class="insta-sidebar-stat">
+            <strong id="sidebar-followers-count">0</strong>
+            <span>Followers</span>
           </div>
-          <div>
-            <div class="widget-stat-val" id="sidebar-following-count">0</div>
-            <div class="widget-stat-lbl">Following</div>
+          <div class="insta-sidebar-stat-divider"></div>
+          <div class="insta-sidebar-stat">
+            <strong id="sidebar-following-count">0</strong>
+            <span>Following</span>
           </div>
         </div>
-        
-        <a href="{% url 'profile_self' %}" class="btn btn-secondary btn-sm" style="width: calc(100% - 16px); margin-top: 16px;">View Full Profile</a>
       </div>
-    </aside>
-    
-    <!-- MIDDLE PANEL: Posts Feed -->
-    <section class="feed-main-content">
-      <!-- Search & Filters Container -->
-      <div class="feed-search-container">
-        <div class="search-bar-wrapper">
-          <!-- Magnifying glass search icon -->
-          <svg class="search-icon-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="feed-search-input" class="form-input search-input" placeholder="Search by skill, username, or project name...">
+      <a href="{% url 'create_post' %}" class="insta-create-post-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Post
+      </a>
+    </div>
+
+    <!-- Quick Nav -->
+    <nav class="insta-left-nav">
+      <a href="{% url 'home_feed' %}" class="insta-left-nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="{% url 'discover_developers' %}" class="insta-left-nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Discover Devs
+      </a>
+      <a href="{% url 'dashboard' %}" class="insta-left-nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Projects
+      </a>
+      <a href="{% url 'notifications_page' %}" class="insta-left-nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===================== MAIN FEED COLUMN ===================== -->
+  <main class="insta-feed-main">
+
+    <!-- Stories Bar -->
+    <div class="insta-stories-bar" id="stories-bar">
+      <!-- Your story -->
+      <div class="insta-story-item insta-story-add" onclick="window.location.href='{% url 'create_post' %}'">
+        <div class="insta-story-ring insta-story-ring-add">
+          <img src="{{ profile.profile_picture }}" alt="{{ user.username }}" class="insta-story-avatar">
+          <div class="insta-story-add-icon">+</div>
         </div>
-        
-        <div class="filter-bar">
-          <div class="filter-chips">
-            <button class="filter-chip active" data-type="all" id="filter-chip-all">All Posts</button>
-            <button class="filter-chip" data-type="recruitment" id="filter-chip-recruitment">Project Recruitment</button>
-            <button class="filter-chip" data-type="hackathon" id="filter-chip-hackathon">Hackathon Teams</button>
-          </div>
-          <span style="font-size: 13px; color: var(--text-light); font-weight: 500;" id="feed-results-count">Loading posts...</span>
-        </div>
+        <span class="insta-story-label">Your Post</span>
       </div>
-      
-      <!-- Startup Pitch Creator CTA -->
-      <div class="card feed-create-post-card startup-pitch-trigger" onclick="window.location.href='{% url 'create_post' %}'" id="feed-create-post-trigger" style="display:flex; justify-content:space-between; align-items:center; border:1px dashed var(--primary-indigo); background:rgba(255, 107, 53, 0.02); transition: all 0.2s ease; cursor:pointer;">
-        <div style="display:flex; gap:16px; align-items:center;">
-          <div style="font-size:24px;">💡</div>
-          <div>
-            <h4 style="font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:2px;">Pitch Your Idea</h4>
-            <p style="font-size:12.5px; color:var(--text-muted);">Have a startup, hackathon, or side-project vision? Launch it here.</p>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-sm" style="font-size:12px; font-weight:700; white-space:nowrap;">+ Launch Project Idea</button>
+      <!-- JS will inject other user story bubbles from suggestions -->
+      <div id="stories-users-container" style="display:contents;"></div>
+    </div>
+
+    <!-- Feed Filter Bar -->
+    <div class="insta-filter-bar">
+      <button class="insta-filter-chip active" data-type="all" id="filter-chip-all">✦ All</button>
+      <button class="insta-filter-chip" data-type="recruitment" id="filter-chip-recruitment">🚀 Projects</button>
+      <button class="insta-filter-chip" data-type="hackathon" id="filter-chip-hackathon">⚡ Hackathons</button>
+      <div class="insta-filter-search">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="feed-search-input" placeholder="Search posts...">
       </div>
-      
-      <!-- Dynamic Feed List -->
-      <div class="post-list" id="feed-posts-container">
-        <!-- JS-injected post cards -->
-        <div class="empty-feed">
-          <p class="empty-feed-title">Loading your feed...</p>
+    </div>
+
+    <!-- Post Cards Container -->
+    <div id="feed-posts-container">
+      <div class="insta-skeleton">
+        <div class="skeleton-header">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-lines"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div>
         </div>
+        <div class="skeleton-body"></div>
       </div>
-    </section>
-    
-    <!-- RIGHT SIDEBAR: Suggestions & Trending -->
-    <aside class="feed-sidebar">
-      <!-- Suggested Developers -->
-      <div class="card">
-        <h3 class="sidebar-widget-title">Connect with Developers</h3>
-        <div class="widget-list" id="sidebar-suggestions-container">
-          <!-- JS-injected developers -->
-        </div>
+    </div>
+
+    <div id="feed-load-more-btn" style="text-align:center; padding:24px; display:none;">
+      <button class="btn btn-secondary" id="load-more-posts">Load more posts</button>
+    </div>
+  </main>
+
+  <!-- ===================== RIGHT SIDEBAR ===================== -->
+  <aside class="insta-right-sidebar">
+    <!-- Suggested Users -->
+    <div class="insta-widget">
+      <div class="insta-widget-header">
+        <span>Suggested Developers</span>
+        <a href="{% url 'discover_developers' %}" class="insta-widget-link">See All</a>
       </div>
-      
-      <!-- Trending Skills -->
-      <div class="card">
-        <h3 class="sidebar-widget-title">Trending Skills</h3>
-        <div class="widget-skills-cloud" id="sidebar-skills-container">
-          <!-- JS-injected skills -->
-        </div>
+      <div id="sidebar-suggestions-container" class="insta-suggestions-list">
+        <!-- JS-injected -->
       </div>
-    </aside>
-    
-  </div>
+    </div>
+
+    <!-- Trending Skills -->
+    <div class="insta-widget">
+      <div class="insta-widget-header">
+        <span>Trending Skills</span>
+      </div>
+      <div class="insta-skills-cloud" id="sidebar-skills-container">
+        <!-- JS-injected -->
+      </div>
+    </div>
+
+    <!-- Quick links footer -->
+    <div class="insta-widget-footer">
+      <a href="{% url 'discover_developers' %}">Explore</a> · 
+      <a href="{% url 'dashboard' %}">Projects</a> · 
+      <a href="{% url 'notifications_page' %}">Notifications</a>
+      <p>&copy; 2026 CollabX</p>
+    </div>
+  </aside>
+
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<script>
+  const CURRENT_USER = "{{ user.username }}";
+  const CURRENT_USER_AVATAR = "{{ profile.profile_picture }}";
+</script>
 <script src="{% static 'js/feed.js' %}"></script>
 {% endblock %}

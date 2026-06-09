@@ -1,350 +1,419 @@
-// Home Feed Page Logic for CollabX
+// CollabX Feed JS — Instagram-style
 
 document.addEventListener('DOMContentLoaded', () => {
   let currentPostType = 'all';
   let searchQuery = '';
   let searchTimeout = null;
 
-  // Initialize: Load Feed, suggestions, and trending skills
+  // Initialize feed, stories, suggestions, skills
   loadFeed(currentPostType, searchQuery);
   loadSuggestions();
   loadTrendingSkills();
+  loadProfileStats();
 
-  // Search input handler with debounce
+  // Filter chips
+  document.querySelectorAll('.insta-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.insta-filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentPostType = chip.dataset.type;
+      loadFeed(currentPostType, searchQuery);
+    });
+  });
+
+  // Search input with debounce
   const searchInput = document.getElementById('feed-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value.trim();
       clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        loadFeed(currentPostType, searchQuery);
-      }, 350); // 350ms debounce
+      searchTimeout = setTimeout(() => loadFeed(currentPostType, searchQuery), 350);
     });
   }
-
-  // Filter chips click handlers
-  const filterChips = document.querySelectorAll('.filter-chip');
-  filterChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      filterChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      
-      currentPostType = chip.getAttribute('data-type');
-      loadFeed(currentPostType, searchQuery);
-    });
-  });
 });
 
-// Load posts feed from REST API
+// ========================
+// Load Feed
+// ========================
 async function loadFeed(postType = 'all', query = '') {
   const container = document.getElementById('feed-posts-container');
-  const countLabel = document.getElementById('feed-results-count');
-  
   if (!container) return;
-  container.innerHTML = '<div class="empty-feed"><p class="empty-feed-title">Loading posts...</p></div>';
 
-  let apiUrl = `/api/posts/?post_type=${postType}`;
-  if (query) {
-    apiUrl = `/api/search/?q=${encodeURIComponent(query)}&post_type=${postType}`;
-  }
+  // Show skeleton
+  container.innerHTML = `
+    ${skeletonCard()}${skeletonCard()}${skeletonCard()}
+  `;
+
+  const apiUrl = query
+    ? `/api/search/?q=${encodeURIComponent(query)}&post_type=${postType}`
+    : `/api/posts/?post_type=${postType}`;
 
   const response = await apiRequest(apiUrl);
-  
+
   if (response.error) {
-    container.innerHTML = `<div class="empty-feed"><p class="empty-feed-title" style="color:var(--status-error);">Error loading feed</p><p class="empty-feed-desc">${response.error}</p></div>`;
-    if (countLabel) countLabel.textContent = 'Error';
+    container.innerHTML = `<div class="insta-empty-state">
+      <div class="insta-empty-state-icon">⚠️</div>
+      <h3>Failed to load</h3>
+      <p>${response.error}</p>
+    </div>`;
     return;
   }
 
   const posts = response.data.posts || [];
-  
-  if (countLabel) {
-    countLabel.textContent = `${posts.length} post${posts.length !== 1 ? 's' : ''} found`;
-  }
 
   if (posts.length === 0) {
-    container.innerHTML = `
-      <div class="empty-feed">
-        <p class="empty-feed-title">No posts found</p>
-        <p class="empty-feed-desc">${query ? 'Try adjusting your search criteria.' : 'Create a post to start the collaboration!'}</p>
-      </div>
-    `;
+    container.innerHTML = `<div class="insta-empty-state">
+      <div class="insta-empty-state-icon">📭</div>
+      <h3>No posts yet</h3>
+      <p>Be the first to pitch an idea or share a hackathon!</p>
+    </div>`;
     return;
   }
 
   container.innerHTML = '';
   posts.forEach(post => {
-    container.appendChild(createPostCard(post));
+    const card = buildPostCard(post);
+    container.appendChild(card);
   });
 }
 
-// Dynamically generate a post card node
-function createPostCard(post) {
-  const card = document.createElement('article');
-  card.className = 'card post-card';
-  card.id = `post-card-${post.id}`;
-
-  const formattedType = post.post_type === 'recruitment' ? 'Project Recruitment' : 'Hackathon Team';
-  const typeClass = post.post_type === 'recruitment' ? 'badge-recruitment' : 'badge-hackathon';
-  
-  // Sniff content for colorful role badges
-  let roleBadgesHTML = '';
-  const searchStr = (post.title + ' ' + post.description + ' ' + post.skills.join(' ')).toLowerCase();
-  
-  if (post.post_type === 'recruitment') {
-    if (searchStr.includes('react') || searchStr.includes('frontend') || searchStr.includes('ui/ux') || searchStr.includes('js') || searchStr.includes('css') || searchStr.includes('html')) {
-      roleBadgesHTML += `<span class="badge badge-role role-frontend" style="background:#2563EB20; color:#2563EB; border:1px solid #2563EB40; margin-right:4px; font-size:11px;">Looking For Frontend</span>`;
-    }
-    if (searchStr.includes('backend') || searchStr.includes('django') || searchStr.includes('node') || searchStr.includes('python') || searchStr.includes('api') || searchStr.includes('postgres') || searchStr.includes('sql')) {
-      roleBadgesHTML += `<span class="badge badge-role role-backend" style="background:#FF6B3520; color:#FF6B35; border:1px solid #FF6B3540; margin-right:4px; font-size:11px;">Looking For Backend</span>`;
-    }
-    if (searchStr.includes('figma') || searchStr.includes('design') || searchStr.includes('designer') || searchStr.includes('ui') || searchStr.includes('ux')) {
-      roleBadgesHTML += `<span class="badge badge-role role-designer" style="background:#10B98120; color:#10B981; border:1px solid #10B98140; margin-right:4px; font-size:11px;">Looking For Designer</span>`;
-    }
-    if (searchStr.includes('ai') || searchStr.includes('ml') || searchStr.includes('pytorch') || searchStr.includes('tensorflow') || searchStr.includes('nlp') || searchStr.includes('model') || searchStr.includes('deep learning')) {
-      roleBadgesHTML += `<span class="badge badge-role role-ai" style="background:#8B5CF620; color:#8B5CF6; border:1px solid #8B5CF640; margin-right:4px; font-size:11px;">Looking For AI Engineer</span>`;
-    }
-    if (!roleBadgesHTML) {
-      roleBadgesHTML = `<span class="badge badge-role role-builder" style="background:#3B82F620; color:#3B82F6; border:1px solid #3B82F640; margin-right:4px; font-size:11px;">Looking For Builders</span>`;
-    }
-  }
-
-  // Build skills badges HTML
-  let skillsHTML = '';
-  post.skills.forEach(skill => {
-    skillsHTML += `<span class="badge badge-skill">${skill}</span>`;
-  });
-
-  // Simulated project metrics based on post ID
-  const simulatedTeamSize = (post.id % 3) + 2; 
-  const simulatedTargetSize = (post.id % 2 === 0) ? 4 : 5;
-  const simulatedOpenPositions = Math.max(1, simulatedTargetSize - simulatedTeamSize);
-  const statusBadgeHTML = `<span class="badge badge-skill" style="font-size:10px; background:#10B98115; color:#10B981; border:1px solid #10B98130; padding:2px 8px;">Hiring</span>`;
-
-  const metaGridHTML = post.post_type === 'recruitment' ? `
-    <div class="recruitment-meta-grid">
-      <div>
-        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Team Size</div>
-        <div style="font-size:13px; font-weight:700; margin-top:2px;">👥 ${simulatedTeamSize}/${simulatedTargetSize} members</div>
-      </div>
-      <div>
-        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Open Positions</div>
-        <div style="font-size:13px; font-weight:700; margin-top:2px; color:var(--accent-cyan);">🎯 ${simulatedOpenPositions} vacancy</div>
-      </div>
-      <div>
-        <div style="font-size:11px; color:var(--text-light); text-transform:uppercase; font-weight:600;">Project Status</div>
-        <div style="font-size:13px; font-weight:700; margin-top:2px; color:var(--status-success);">${statusBadgeHTML}</div>
-      </div>
+function skeletonCard() {
+  return `<div class="insta-skeleton">
+    <div class="skeleton-header">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-lines"><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div>
     </div>
-  ` : '';
+    <div class="skeleton-body"></div>
+  </div>`;
+}
 
-  // Follow button logic
-  let followButtonHTML = '';
-  if (!post.is_author) {
-    const followText = post.is_following ? 'Following' : 'Follow';
-    const followBtnClass = post.is_following ? 'btn-secondary' : 'btn-primary';
-    followButtonHTML = `
-      <button class="btn ${followBtnClass} btn-sm btn-follow-toggle" data-username="${post.author.username}">
-        ${followText}
-      </button>
-    `;
-  }
+// ========================
+// Build Instagram Post Card
+// ========================
+function buildPostCard(post) {
+  const card = document.createElement('div');
+  card.className = 'insta-post-card';
+  card.dataset.postId = post.id;
+
+  const typeLabel = post.post_type === 'recruitment' ? 'Project' :
+                    post.post_type === 'hackathon'   ? 'Hackathon' : 'Post';
+  const typeClass = post.post_type === 'recruitment' ? 'badge-recruitment' :
+                    post.post_type === 'hackathon'   ? 'badge-hackathon' : 'badge-general';
+
+  const timeAgo = formatTimeAgo(post.created_at);
+  const skillsHtml = (post.skills || []).slice(0, 5).map(s =>
+    `<span class="insta-skill-tag">${s}</span>`).join('');
+
+  // Role badges from content
+  const rolesHtml = extractRoleBadges(post.content);
 
   card.innerHTML = `
-    <div class="post-header">
-      <div class="post-author-info">
-        <a href="/profile/${post.author.username}/">
-          <img src="${post.author.profile_picture}" alt="${post.author.username}" class="avatar">
-        </a>
-        <div class="post-author-meta">
-          <a href="/profile/${post.author.username}/" class="post-author-name">${post.author.full_name}</a>
-          <div class="post-time-meta">
-            <span>@${post.author.username}</span>
-            <span>&bull;</span>
-            <span>${formatRelativeTime(post.created_at)}</span>
-          </div>
-        </div>
+    <!-- Post Header -->
+    <div class="insta-post-header">
+      <a href="/profile/${post.author}/" class="insta-post-avatar-wrap" title="${post.author}">
+        <img src="${post.author_avatar || '/static/img/default-avatar.png'}" alt="${post.author}" class="insta-post-avatar"
+          onerror="this.src='/static/img/default-avatar.png'">
+      </a>
+      <div class="insta-post-author-info">
+        <a href="/profile/${post.author}/" class="insta-post-author-name">${post.author_name || post.author}</a>
+        <div class="insta-post-meta">@${post.author} · ${timeAgo}</div>
       </div>
-      
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <span class="post-type-badge ${typeClass}">${formattedType}</span>
-        ${followButtonHTML}
-      </div>
+      <span class="insta-post-type-badge ${typeClass}">${typeLabel}</span>
     </div>
-    
-    <div class="post-role-badges">
-      ${roleBadgesHTML}
+
+    <!-- Post Content -->
+    <div class="insta-post-content">
+      <div class="insta-post-title">${escapeHtml(post.title)}</div>
+      <div class="insta-post-body" id="body-${post.id}">${escapeHtml(post.content)}</div>
+      ${post.content && post.content.length > 200
+        ? `<button class="insta-post-expand-btn" onclick="toggleExpand(${post.id})">more</button>`
+        : ''}
     </div>
-    
-    <a href="/post/${post.id}/">
-      <h3 class="post-title">${post.title}</h3>
-    </a>
-    
-    <p class="post-desc">${post.description}</p>
-    
-    ${metaGridHTML}
-    
-    <div class="post-skills-section">
-      ${skillsHTML}
-    </div>
-    
-    <div class="post-actions">
-      <button class="post-action-btn btn-like-toggle ${post.is_liked ? 'liked' : ''}" data-post-id="${post.id}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+
+    ${skillsHtml ? `<div class="insta-post-skills">${skillsHtml}</div>` : ''}
+    ${rolesHtml  ? `<div class="role-badges-row">${rolesHtml}</div>` : ''}
+
+    <!-- Actions -->
+    <div class="insta-post-actions">
+      <button class="insta-action-btn ${post.liked_by_user ? 'liked' : ''}" 
+              id="like-btn-${post.id}" onclick="handleLike(${post.id})">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="${post.liked_by_user ? '#f43f5e' : 'none'}" 
+             stroke="${post.liked_by_user ? '#f43f5e' : 'currentColor'}" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <span>Like (<span class="likes-count">${post.likes_count}</span>)</span>
+        <span class="insta-like-count" id="like-count-${post.id}">${post.likes_count || 0}</span>
       </button>
-      
-      <a href="/post/${post.id}/" class="post-action-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+
+      <button class="insta-action-btn" onclick="toggleComments(${post.id})">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
-        <span>Comment (${post.comments_count})</span>
+        <span id="comment-count-${post.id}">${post.comments_count || 0}</span>
+      </button>
+
+      <div class="insta-action-spacer"></div>
+
+      <a href="/post/${post.id}/" class="insta-action-detail-btn" title="View full post">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        View
       </a>
     </div>
+
+    <!-- Inline Comments Section -->
+    <div class="insta-comments-section" id="comments-${post.id}">
+      <div class="insta-comment-input-row">
+        <img src="${window.CURRENT_USER_AVATAR || '/static/img/default-avatar.png'}" 
+             alt="You" class="insta-comment-user-avatar"
+             onerror="this.src='/static/img/default-avatar.png'">
+        <input type="text" class="insta-comment-input" id="comment-input-${post.id}" 
+               placeholder="Add a comment..." maxlength="500">
+        <button class="insta-comment-submit-btn" onclick="submitComment(${post.id})">Post</button>
+      </div>
+      <div class="insta-comments-list" id="comments-list-${post.id}"></div>
+    </div>
   `;
-
-  // Bind Follow Button
-  const followBtn = card.querySelector('.btn-follow-toggle');
-  if (followBtn) {
-    followBtn.addEventListener('click', () => toggleFollow(post.author.username));
-  }
-
-  // Bind Like Button
-  const likeBtn = card.querySelector('.btn-like-toggle');
-  if (likeBtn) {
-    likeBtn.addEventListener('click', () => toggleLike(post.id, likeBtn));
-  }
 
   return card;
 }
 
-// Toggle Like
-async function toggleLike(postId, buttonElement) {
-  buttonElement.disabled = true;
+// ========================
+// Likes
+// ========================
+async function handleLike(postId) {
+  const btn = document.getElementById(`like-btn-${postId}`);
+  const countEl = document.getElementById(`like-count-${postId}`);
+  if (!btn) return;
+
+  const wasLiked = btn.classList.contains('liked');
+  const newCount = Math.max(0, parseInt(countEl.textContent || '0') + (wasLiked ? -1 : 1));
+
+  // Optimistic update
+  btn.classList.toggle('liked');
+  const svg = btn.querySelector('svg');
+  const newColor = wasLiked ? 'currentColor' : '#f43f5e';
+  const newFill  = wasLiked ? 'none'         : '#f43f5e';
+  svg.setAttribute('stroke', newColor);
+  svg.setAttribute('fill', newFill);
+  countEl.textContent = newCount;
+
   const response = await apiRequest(`/api/posts/${postId}/like/`, { method: 'POST' });
-  buttonElement.disabled = false;
+  if (response.error) {
+    // Revert
+    btn.classList.toggle('liked');
+    svg.setAttribute('stroke', wasLiked ? '#f43f5e' : 'currentColor');
+    svg.setAttribute('fill',   wasLiked ? '#f43f5e' : 'none');
+    countEl.textContent = parseInt(countEl.textContent) + (wasLiked ? 1 : -1);
+    showToast(response.error, 'error');
+  }
+}
+
+// ========================
+// Comments
+// ========================
+function toggleComments(postId) {
+  const section = document.getElementById(`comments-${postId}`);
+  if (!section) return;
+  const isOpen = section.classList.contains('open');
+  section.classList.toggle('open');
+  if (!isOpen) loadComments(postId);
+}
+
+async function loadComments(postId) {
+  const list = document.getElementById(`comments-list-${postId}`);
+  if (!list) return;
+  list.innerHTML = '<div style="color:var(--text-light);font-size:13px;padding:8px 0;">Loading...</div>';
+
+  const response = await apiRequest(`/api/posts/${postId}/`);
+  if (response.error || !response.data) { list.innerHTML = ''; return; }
+
+  const comments = response.data.comments || [];
+  if (comments.length === 0) {
+    list.innerHTML = '<div style="color:var(--text-light);font-size:13px;padding:8px 0;">No comments yet. Be first!</div>';
+    return;
+  }
+
+  list.innerHTML = comments.map(c => `
+    <div class="insta-comment-item">
+      <img src="${c.author_avatar || '/static/img/default-avatar.png'}" alt="${c.author}" 
+           class="insta-comment-item-avatar" onerror="this.src='/static/img/default-avatar.png'">
+      <div class="insta-comment-item-body">
+        <div class="insta-comment-item-author"><a href="/profile/${c.author}/" style="color:inherit;text-decoration:none;">${c.author}</a></div>
+        <div class="insta-comment-item-text">${escapeHtml(c.content)}</div>
+        <div class="insta-comment-item-time">${formatTimeAgo(c.created_at)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function submitComment(postId) {
+  const input = document.getElementById(`comment-input-${postId}`);
+  const content = input ? input.value.trim() : '';
+  if (!content) return;
+
+  const response = await apiRequest(`/api/posts/${postId}/comment/`, {
+    method: 'POST',
+    body: JSON.stringify({ content })
+  });
 
   if (response.error) {
     showToast(response.error, 'error');
     return;
   }
 
-  const { liked, likes_count } = response.data;
-  const countSpan = buttonElement.querySelector('.likes-count');
-  
-  if (liked) {
-    buttonElement.classList.add('liked');
-    showToast('Post liked!');
-  } else {
-    buttonElement.classList.remove('liked');
-  }
-  
-  if (countSpan) countSpan.textContent = likes_count;
+  input.value = '';
+  // Update count
+  const countEl = document.getElementById(`comment-count-${postId}`);
+  if (countEl) countEl.textContent = parseInt(countEl.textContent || '0') + 1;
+
+  // Reload comments inline
+  loadComments(postId);
+  showToast('Comment posted!', 'success');
 }
 
-// Toggle Follow
-async function toggleFollow(username) {
-  // Disable all follow buttons for this user across page to prevent spam
-  const buttons = document.querySelectorAll(`.btn-follow-toggle[data-username="${username}"]`);
-  buttons.forEach(btn => btn.disabled = true);
-
-  const response = await apiRequest(`/api/social/follow/${username}/`, { method: 'POST' });
-
-  buttons.forEach(btn => {
-    btn.disabled = false;
-    if (response.error) return;
-
-    const { is_following } = response.data;
-    if (is_following) {
-      btn.textContent = 'Following';
-      btn.className = 'btn btn-secondary btn-sm btn-follow-toggle';
-    } else {
-      btn.textContent = 'Follow';
-      btn.className = 'btn btn-primary btn-sm btn-follow-toggle';
-    }
-  });
-
-  if (response.error) {
-    showToast(response.error, 'error');
-  } else {
-    showToast(response.data.message);
+// Enter key to submit comment
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.classList.contains('insta-comment-input')) {
+    const postId = e.target.id.replace('comment-input-', '');
+    submitComment(parseInt(postId));
   }
+});
+
+// ========================
+// Expand/Collapse body text
+// ========================
+function toggleExpand(postId) {
+  const body = document.getElementById(`body-${postId}`);
+  const btn = body?.nextElementSibling;
+  if (!body) return;
+  body.classList.toggle('expanded');
+  if (btn) btn.textContent = body.classList.contains('expanded') ? 'less' : 'more';
 }
 
-// Fetch suggested connections
+// ========================
+// Suggestions (Right Sidebar + Stories)
+// ========================
 async function loadSuggestions() {
   const container = document.getElementById('sidebar-suggestions-container');
-  if (!container) return;
+  const storiesContainer = document.getElementById('stories-users-container');
 
   const response = await apiRequest('/api/social/suggestions/');
-  if (response.error || !response.data.suggestions) {
-    container.innerHTML = '<p style="font-size:12px; color:var(--text-light);">No suggestions currently.</p>';
-    return;
-  }
+  if (response.error) return;
 
-  const users = response.data.suggestions;
-  if (users.length === 0) {
-    container.innerHTML = '<p style="font-size:12px; color:var(--text-light);">No developers found to suggest.</p>';
-    return;
-  }
+  const users = response.data.suggestions || [];
 
-  container.innerHTML = '';
-  users.forEach(u => {
-    const item = document.createElement('div');
-    item.className = 'widget-user-item';
-    
-    item.innerHTML = `
-      <div class="widget-user-info">
-        <a href="/profile/${u.username}/">
-          <img src="${u.profile_picture}" alt="${u.username}" class="avatar btn-sm" style="width: 38px; height: 38px;">
-        </a>
-        <div class="widget-user-details">
-          <a href="/profile/${u.username}/" class="widget-user-name">${u.full_name}</a>
-          <span class="widget-user-title">${u.college || '@' + u.username}</span>
+  // Stories bar
+  if (storiesContainer) {
+    storiesContainer.innerHTML = users.slice(0, 6).map(u => `
+      <div class="insta-story-item" onclick="window.location.href='/profile/${u.username}/'">
+        <div class="insta-story-ring">
+          <img src="${u.profile_picture || '/static/img/default-avatar.png'}" alt="${u.username}" class="insta-story-avatar"
+            onerror="this.src='/static/img/default-avatar.png'">
         </div>
+        <span class="insta-story-label">${u.username}</span>
       </div>
-      <button class="btn btn-primary btn-sm btn-follow-toggle" data-username="${u.username}" style="padding: 4px 10px; font-size: 11px;">Follow</button>
-    `;
+    `).join('');
+  }
 
-    // Bind Follow
-    const btn = item.querySelector('.btn-follow-toggle');
-    btn.addEventListener('click', () => toggleFollow(u.username));
-    
-    container.appendChild(item);
-  });
+  // Right sidebar suggestions
+  if (container) {
+    if (users.length === 0) {
+      container.innerHTML = '<div style="font-size:13px;color:var(--text-light);">No suggestions yet. Explore developers!</div>';
+      return;
+    }
+    container.innerHTML = users.slice(0, 5).map(u => `
+      <div class="insta-suggestion-item">
+        <img src="${u.profile_picture || '/static/img/default-avatar.png'}" alt="${u.username}"
+             class="insta-suggestion-avatar" onerror="this.src='/static/img/default-avatar.png'">
+        <div class="insta-suggestion-info">
+          <a href="/profile/${u.username}/" class="insta-suggestion-name">${u.full_name || u.username}</a>
+          <span class="insta-suggestion-meta">@${u.username}${u.college ? ' · ' + u.college : ''}</span>
+        </div>
+        <button class="insta-follow-btn" id="follow-btn-${u.username}" onclick="handleFollow('${u.username}')">
+          ${u.is_following ? 'Following' : 'Follow'}
+        </button>
+      </div>
+    `).join('');
+  }
 }
 
-// Fetch trending skills
+async function handleFollow(username) {
+  const btn = document.getElementById(`follow-btn-${username}`);
+  if (!btn) return;
+  const isFollowing = btn.textContent.trim() === 'Following';
+  btn.textContent = isFollowing ? 'Follow' : 'Following';
+  btn.classList.toggle('following', !isFollowing);
+
+  const response = await apiRequest(`/api/social/follow/${username}/`, { method: 'POST' });
+  if (response.error) {
+    btn.textContent = isFollowing ? 'Following' : 'Follow';
+    btn.classList.toggle('following', isFollowing);
+    showToast(response.error, 'error');
+  }
+}
+
+// ========================
+// Trending Skills
+// ========================
 async function loadTrendingSkills() {
   const container = document.getElementById('sidebar-skills-container');
   if (!container) return;
 
   const response = await apiRequest('/api/social/trending-skills/');
-  if (response.error || !response.data.skills) {
-    container.innerHTML = '<p style="font-size:12px; color:var(--text-light);">No skills trending.</p>';
-    return;
-  }
+  if (response.error) return;
 
-  const skills = response.data.skills;
-  container.innerHTML = '';
-  skills.forEach(skill => {
-    const chip = document.createElement('button');
-    chip.className = 'badge badge-skill';
-    chip.textContent = skill;
-    chip.style.cursor = 'pointer';
-    chip.style.border = '1px solid rgba(79, 70, 229, 0.15)';
-    
-    chip.addEventListener('click', () => {
-      const searchInput = document.getElementById('feed-search-input');
-      if (searchInput) {
-        searchInput.value = skill;
-        // Trigger search
-        searchInput.dispatchEvent(new Event('input'));
-      }
-    });
-    
-    container.appendChild(chip);
-  });
+  const skills = response.data.skills || [];
+  container.innerHTML = skills.slice(0, 12).map(s =>
+    `<span class="insta-skill-bubble">${s}</span>`
+  ).join('');
+}
+
+// ========================
+// Profile Stats (Left Sidebar)
+// ========================
+async function loadProfileStats() {
+  const response = await apiRequest('/api/profile/');
+  if (response.error) return;
+  const p = response.data;
+  const el = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+  el('sidebar-followers-count', p.followers_count || 0);
+  el('sidebar-following-count', p.following_count || 0);
+}
+
+// ========================
+// Helpers
+// ========================
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+function formatTimeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (diff < 60)   return 'just now';
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+function extractRoleBadges(content) {
+  if (!content) return '';
+  const roles = [
+    { key: 'frontend',  label: 'Frontend Dev',   cls: 'role-badge-frontend' },
+    { key: 'backend',   label: 'Backend Dev',    cls: 'role-badge-backend' },
+    { key: 'fullstack', label: 'Full Stack',     cls: 'role-badge-fullstack' },
+    { key: 'design',    label: 'UI/UX Designer', cls: 'role-badge-design' },
+    { key: 'ai',        label: 'AI/ML',          cls: 'role-badge-aiml' },
+    { key: 'ml',        label: 'ML Engineer',    cls: 'role-badge-aiml' },
+    { key: 'mobile',    label: 'Mobile Dev',     cls: 'role-badge-default' },
+  ];
+  const lower = content.toLowerCase();
+  const found = roles.filter(r => lower.includes(r.key));
+  if (!found.length) return '';
+  return found.map(r => `<span class="role-badge ${r.cls}">👥 ${r.label}</span>`).join('');
 }

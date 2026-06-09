@@ -329,3 +329,41 @@ footer {
   font-size: 14px;
   margin-top: 80px;
 }
+
+/* ===================================
+   Mobile Bottom Nav (global base)
+   =================================== */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(19, 27, 49, 0.97);
+  border-top: 1px solid var(--border-light);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 6px 0 env(safe-area-inset-bottom, 6px);
+}
+
+/* Updated Nav Link with icon support */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Responsive: hide desktop nav links on mobile */
+@media (max-width: 900px) {
+  .mobile-bottom-nav { display: flex !important; justify-content: space-around; }
+  .nav-links { display: none !important; }
+  .nav-search { display: none !important; }
+  .nav-post-btn { display: none !important; }
+  body { padding-bottom: 70px; }
+  footer { margin-top: 20px; }
+}
+
+@media (max-width: 600px) {
+  .navbar-inner { height: 58px; }
+  .logo { font-size: 20px; }
+}
+

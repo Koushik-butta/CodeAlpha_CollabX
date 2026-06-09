@@ -1,127 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Register - CollabX{% endblock %}
+{% block title %}Sign Up — CollabX{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="auth-wrapper">
-  <!-- Left Side: Hero Illustration panel -->
-  <div class="auth-hero-section">
-    <div class="auth-floating-elements">
-      <div class="floating-icon fi-1">&lt;/&gt;</div>
-      <div class="floating-icon fi-2">🚀</div>
-      <div class="floating-icon fi-3">💡</div>
-      <div class="floating-icon fi-4">⚡</div>
-      <div class="floating-icon fi-5">⚙️</div>
-    </div>
-    <div class="auth-hero-content">
-      <h1 class="auth-hero-title">Build Together.<br><span>Innovate Faster.</span></h1>
-      <p class="auth-hero-subtitle">Find teammates, join projects, collaborate on ideas and build your dream team.</p>
-      
-      <!-- Premium Hackathon Graphic -->
-      <svg viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 320px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));">
-        <rect width="400" height="220" rx="16" fill="#131B31" stroke="rgba(255,255,255,0.08)"/>
-        <!-- Laptops -->
-        <rect x="60" y="140" width="80" height="10" rx="2" fill="#ff6b35"/>
-        <rect x="75" y="90" width="50" height="50" rx="4" fill="#0b1020" stroke="rgba(255,255,255,0.08)"/>
-        <rect x="260" y="140" width="80" height="10" rx="2" fill="#2563eb"/>
-        <rect x="275" y="90" width="50" height="50" rx="4" fill="#0b1020" stroke="rgba(255,255,255,0.08)"/>
-        <!-- Code window mockup -->
-        <rect x="130" y="40" width="140" height="90" rx="6" fill="#070a16" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
-        <circle cx="145" cy="52" r="3" fill="#ef4444"/>
-        <circle cx="155" cy="52" r="3" fill="#f59e0b"/>
-        <circle cx="165" cy="52" r="3" fill="#10b981"/>
-        <line x1="145" y1="70" x2="200" y2="70" stroke="#ff6b35" stroke-width="3" stroke-linecap="round"/>
-        <line x1="145" y1="85" x2="240" y2="85" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
-        <line x1="145" y1="100" x2="180" y2="100" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
-        <!-- Connection node lines -->
-        <path d="M100 90 C 150 40, 200 40, 200 40" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
-        <path d="M300 90 C 250 40, 200 40, 200 40" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
-      </svg>
-    </div>
-  </div>
+<div class="auth-page-bg">
+  <div class="auth-center-card" style="max-width: 420px;">
 
-  <!-- Right Side: Forms Container -->
-  <div class="auth-form-container">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h2 class="auth-title">Create Account</h2>
-        <p class="auth-subtitle">Join CollabX to discover projects and build teams</p>
+    <!-- Brand -->
+    <div class="auth-brand">
+      <span class="auth-brand-logo">CollabX</span>
+      <p class="auth-brand-tagline">Join 1000+ developers building the future</p>
+    </div>
+
+    <h2 class="auth-form-heading">Create your account</h2>
+    <p class="auth-form-subheading">Fill in the details to get started</p>
+
+    <!-- Register Form -->
+    <form id="register-form" autocomplete="off">
+      <!-- Full Name -->
+      <div class="auth-input-group">
+        <span class="input-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <input type="text" id="full-name" class="form-input" placeholder="Full Name" autocomplete="name" required>
       </div>
-      
-      <form id="register-form">
-        <div class="form-group">
-          <label for="full-name" class="form-label">Full Name</label>
-          <input type="text" id="full-name" class="form-input" placeholder="e.g. John Doe" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" id="username" class="form-input" placeholder="e.g. johndoe" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-input" placeholder="email@example.com" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
-          <div class="password-field-container">
-            <input type="password" id="password" class="form-input" placeholder="Min. 6 characters" required>
-            <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-            </button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="confirm-password" class="form-label">Confirm Password</label>
-          <div class="password-field-container">
-            <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password" required>
-            <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-            </button>
-          </div>
-        </div>
-        
-        <button type="submit" class="btn btn-primary auth-btn-submit" id="btn-register-submit">Sign Up</button>
-      </form>
-      
-      <div class="auth-divider">Or sign up with</div>
-      
-      <div class="social-buttons">
-        <a href="{% url 'github_login' %}" class="btn-social btn-github-auth" id="btn-register-github">
-          <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-          </svg>
-          Sign up with GitHub
-        </a>
-        
-        <a href="{% url 'google_login' %}" class="btn-social btn-google-auth" id="btn-register-google">
-          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
-          </svg>
-          Sign up with Google
-        </a>
+
+      <!-- Username -->
+      <div class="auth-input-group">
+        <span class="input-icon">@</span>
+        <input type="text" id="username" class="form-input" placeholder="Username (e.g. johndoe)" autocomplete="username" required>
       </div>
-      
-      <div class="auth-footer">
-        Already have an account? <a href="{% url 'login' %}" id="link-goto-login">Login</a>
+
+      <!-- Email -->
+      <div class="auth-input-group">
+        <span class="input-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <input type="email" id="email" class="form-input" placeholder="Email address" autocomplete="email" required>
       </div>
+
+      <!-- Password -->
+      <div class="auth-input-group auth-pw-wrapper">
+        <span class="input-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <input type="password" id="password" class="form-input" placeholder="Password (min 6 chars)" autocomplete="new-password" required>
+        <button type="button" class="auth-eye-btn" data-target="password" aria-label="Toggle">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="auth-input-group auth-pw-wrapper">
+        <span class="input-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm password" autocomplete="new-password" required>
+        <button type="button" class="auth-eye-btn" data-target="confirm-password" aria-label="Toggle">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+
+      <button type="submit" class="auth-submit-btn" id="btn-register-submit">Create Account</button>
+    </form>
+
+    <div class="auth-or-divider">or sign up with</div>
+
+    <div class="auth-social-row">
+      <a href="{% url 'github_login' %}" class="auth-social-btn auth-social-github" id="btn-register-github">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        GitHub
+      </a>
+      <a href="{% url 'google_login' %}" class="auth-social-btn auth-social-google" id="btn-register-google">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg>
+        Google
+      </a>
+    </div>
+
+    <div class="auth-switch-link">
+      Already have an account? <a href="{% url 'login' %}" id="link-goto-login">Log in</a>
     </div>
   </div>
 </div>
