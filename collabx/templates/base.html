@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="{% static 'css/variables.css' %}">
   <link rel="stylesheet" href="{% static 'css/global.css' %}">
   {% block extra_css %}{% endblock %}
+  
+  <!-- Chart.js for Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -29,10 +32,15 @@
       {% if user.is_authenticated %}
         <div class="nav-links">
           <a href="{% url 'home_feed' %}" class="nav-link {% if request.resolver_match.url_name == 'home_feed' %}active{% endif %}" id="nav-link-feed">Home Feed</a>
+          <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" id="nav-link-dashboard">Dashboard</a>
           <a href="{% url 'discover_developers' %}" class="nav-link {% if request.resolver_match.url_name == 'discover_developers' %}active{% endif %}" id="nav-link-discover">Discover Devs</a>
           <a href="{% url 'create_project' %}" class="nav-link {% if request.resolver_match.url_name == 'create_project' %}active{% endif %}" id="nav-link-project-create">Create Project</a>
           <a href="{% url 'profile_self' %}" class="nav-link {% if request.resolver_match.url_name == 'profile_self' %}active{% endif %}" id="nav-link-profile">My Profile</a>
           <a href="{% url 'notifications_page' %}" class="nav-link {% if request.resolver_match.url_name == 'notifications_page' %}active{% endif %}" id="nav-link-notifs">Notifications <span id="navbar-notif-badge" style="background:var(--status-error); color:white; border-radius:10px; padding:2px 6px; font-size:10px; display:none; margin-left:4px;">0</span></a>
+        </div>
+        
+        <div class="nav-search" style="margin-left: auto; margin-right: 16px;">
+          <input type="text" id="navbar-search-input" placeholder="Search..." style="background: var(--bg-main); border: 1px solid var(--border-light); color: var(--text-main); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 14px; width: 180px; outline: none; transition: width 0.2s;" onkeydown="if(event.key === 'Enter') { window.location.href = '/dashboard/?search=' + encodeURIComponent(this.value); }">
         </div>
         
         <div class="nav-actions">

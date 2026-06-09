@@ -111,3 +111,17 @@ def project_detail_page(request, project_id):
 @login_required(login_url='login')
 def notifications_page(request):
     return render(request, 'notifications.html')
+
+@login_required(login_url='login')
+def project_workspace_page(request, project_id):
+    try:
+        project = Project.objects.get(id=project_id)
+        if project.creator == request.user or project.members.filter(id=request.user.id).exists():
+            return render(request, 'workspace.html', {'project': project})
+        return redirect('project_detail', project_id=project_id)
+    except Project.DoesNotExist:
+        return redirect('home_feed')
+
+@login_required(login_url='login')
+def dashboard_page(request):
+    return render(request, 'dashboard.html')

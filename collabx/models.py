@@ -179,3 +179,66 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower.username} follows {self.following.username}"
+
+
+class Task(models.Model):
+    PRIORITY_CHOICES = (
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    )
+    STATUS_CHOICES = (
+        ('todo', 'Todo'),
+        ('in_progress', 'In Progress'),
+        ('review', 'Review'),
+        ('completed', 'Completed'),
+    )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks')
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, default='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='medium')
+    assignee = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tasks')
+    due_date = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.status})"
+
+
+class ProjectMessage(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='messages')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='project_messages')
+    content = models.TextField()
+    reply_to = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='replies')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Message by {self.user.username} in {self.project.title}"
+
+
+class ProjectFile(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='files')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='project_files')
+    file_name = models.CharField(max_length=255)
+    file_url = models.URLField(max_length=500)
+    file_size = models.BigIntegerField(default=0)  # size in bytes
+    file_type = models.CharField(max_length=100, blank=True, default='') # mime type or category
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.file_name} in {self.project.title}"
+
+
+class ProjectActivity(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='activities')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='project_activities')
+    description = models.TextField()
+    activity_type = models.CharField(max_length=50, default='system')  # e.g., 'task', 'chat', 'file', 'system'
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Activity in {self.project.title}: {self.description[:30]}"

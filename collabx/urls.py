@@ -1,5 +1,5 @@
 from django.urls import path
-from collabx.views import pages, auth, profile, posts, social, search, projects, notifications, discovery
+from collabx.views import pages, auth, profile, posts, social, search, projects, notifications, discovery, workspace, dashboard
 
 urlpatterns = [
     # Page Views
@@ -71,4 +71,21 @@ urlpatterns = [
     
     # Phase 2 Developers API Endpoints
     path('api/developers/', discovery.get_developers_api, name='api_developers_list'),
+
+    # Phase 3 Pages
+    path('project/<int:project_id>/workspace/', pages.project_workspace_page, name='project_workspace'),
+    path('dashboard/', pages.dashboard_page, name='dashboard'),
+
+    # Phase 3 Workspace API Endpoints
+    path('api/projects/<int:project_id>/workspace/tasks/', workspace.workspace_tasks_api, name='api_workspace_tasks'),
+    path('api/projects/<int:project_id>/workspace/tasks/<int:task_id>/', workspace.workspace_task_detail_api, name='api_workspace_task_detail'),
+    path('api/projects/<int:project_id>/workspace/discussions/', workspace.workspace_discussions_api, name='api_workspace_discussions'),
+    path('api/projects/<int:project_id>/workspace/discussions/<int:message_id>/', workspace.workspace_message_detail_api, name='api_workspace_message_detail'),
+    path('api/projects/<int:project_id>/workspace/files/', workspace.workspace_files_api, name='api_workspace_files'),
+    path('api/projects/<int:project_id>/workspace/files/<int:file_id>/', workspace.workspace_file_detail_api, name='api_workspace_file_detail'),
+    path('api/projects/<int:project_id>/workspace/timeline/', workspace.workspace_timeline_api, name='api_workspace_timeline'),
+    path('api/projects/<int:project_id>/workspace/analytics/', workspace.workspace_analytics_api, name='api_workspace_analytics'),
+
+    # Phase 3 Dashboard API Endpoints
+    path('api/dashboard/data/', dashboard.get_dashboard_data_api, name='api_dashboard_data'),
 ]

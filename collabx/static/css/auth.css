@@ -160,14 +160,14 @@
 }
 
 .btn-google-auth {
-  background: #ffffff;
-  color: #374151;
+  background: #1e293b;
+  color: #f9fafb;
   border: 1px solid var(--border-light);
 }
 .btn-google-auth:hover {
-  background: #f9fafb;
-  border-color: rgba(15, 23, 42, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #334155;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
 }
 

@@ -2,28 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Palette - Indigo & Purple gradients with Cyan accents */
-  --primary-indigo: #4f46e5;
-  --primary-indigo-hover: #4338ca;
-  --primary-purple: #9333ea;
-  --primary-purple-hover: #7e22ce;
-  --accent-cyan: #06b6d4;
-  --accent-cyan-hover: #0891b2;
-  --accent-cyan-light: rgba(6, 182, 212, 0.1);
+  /* Color Palette - Glowing Electric Blue and Cyan accents */
+  --primary-indigo: #3b82f6;
+  --primary-indigo-hover: #2563eb;
+  --primary-purple: #06b6d4;
+  --primary-purple-hover: #0891b2;
+  --accent-cyan: #60a5fa;
+  --accent-cyan-hover: #3b82f6;
+  --accent-cyan-light: rgba(96, 165, 250, 0.15);
 
   /* Gradients */
-  --grad-primary: linear-gradient(135deg, var(--primary-indigo) 0%, var(--primary-purple) 100%);
+  --grad-primary: linear-gradient(135deg, var(--primary-indigo) 0%, #00d2ff 100%);
   --grad-cyan-indigo: linear-gradient(135deg, var(--accent-cyan) 0%, var(--primary-indigo) 100%);
-  --grad-purple-cyan: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-cyan) 100%);
+  --grad-purple-cyan: linear-gradient(135deg, var(--primary-indigo) 0%, var(--accent-cyan) 100%);
 
-  /* Neutral Colors (Clean white background aesthetic) */
-  --bg-main: #f8fafc;
-  --bg-card: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
-  --border-light: rgba(15, 23, 42, 0.08);
-  --border-focus: rgba(79, 70, 229, 0.4);
+  /* Neutral Colors (Sleek Black and Deep Blue aesthetic) */
+  --bg-main: #030712;
+  --bg-card: #0f172a;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --text-light: #6b7280;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(59, 130, 246, 0.4);
 
   /* Status Colors */
   --status-success: #10b981;
