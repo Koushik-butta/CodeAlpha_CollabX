@@ -2,28 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Palette - Glowing Electric Blue and Cyan accents */
-  --primary-indigo: #3b82f6;
-  --primary-indigo-hover: #2563eb;
-  --primary-purple: #06b6d4;
-  --primary-purple-hover: #0891b2;
-  --accent-cyan: #60a5fa;
-  --accent-cyan-hover: #3b82f6;
-  --accent-cyan-light: rgba(96, 165, 250, 0.15);
+  /* Color Palette - Hackathon Orange & Developer Blue with Success Green accents */
+  --primary-indigo: #ff6b35;
+  --primary-indigo-hover: #e0531e;
+  --primary-purple: #2563eb;
+  --primary-purple-hover: #1d4ed8;
+  --accent-cyan: #10b981;
+  --accent-cyan-hover: #059669;
+  --accent-cyan-light: rgba(16, 185, 129, 0.15);
 
   /* Gradients */
-  --grad-primary: linear-gradient(135deg, var(--primary-indigo) 0%, #00d2ff 100%);
+  --grad-primary: linear-gradient(135deg, var(--primary-indigo) 0%, var(--primary-purple) 100%);
   --grad-cyan-indigo: linear-gradient(135deg, var(--accent-cyan) 0%, var(--primary-indigo) 100%);
-  --grad-purple-cyan: linear-gradient(135deg, var(--primary-indigo) 0%, var(--accent-cyan) 100%);
+  --grad-purple-cyan: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-cyan) 100%);
 
-  /* Neutral Colors (Sleek Black and Deep Blue aesthetic) */
-  --bg-main: #030712;
-  --bg-card: #0f172a;
+  /* Neutral Colors (Sleek Dark Hackathon theme) */
+  --bg-main: #0b1020;
+  --bg-card: #131b31;
   --text-main: #f9fafb;
-  --text-muted: #9ca3af;
-  --text-light: #6b7280;
+  --text-muted: #94a3b8;
+  --text-light: #64748b;
   --border-light: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(59, 130, 246, 0.4);
+  --border-focus: rgba(255, 107, 53, 0.4);
 
   /* Status Colors */
   --status-success: #10b981;

@@ -1,25 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Dashboard - CollabX{% endblock %}
+{% block title %}Developer Command Center - CollabX{% endblock %}
 
 {% block extra_css %}
 <style>
-  .dashboard-container {
+  .dashboard-grid-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    gap: 32px;
     padding-top: 40px;
     padding-bottom: 60px;
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 70px - 165px);
+  }
+
+  @media (max-width: 1200px) {
+    .dashboard-grid-layout {
+      grid-template-columns: 200px 1fr;
+    }
+    .right-column-panel {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-grid-layout {
+      grid-template-columns: 1fr;
+    }
+    .left-sidebar-panel {
+      display: none;
+    }
   }
 
   .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .dashboard-title h1 {
-    font-size: 32px;
+    font-size: 28px;
     background: var(--grad-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -27,7 +48,8 @@
 
   .dashboard-title p {
     color: var(--text-muted);
-    margin-top: 4px;
+    font-size: 14px;
+    margin-top: 2px;
   }
 
   .quick-actions {
@@ -35,17 +57,42 @@
     gap: 12px;
   }
 
-  /* Grid Layouts */
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 32px;
+  /* Left Command Sidebar */
+  .left-sidebar-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    height: fit-content;
   }
 
-  @media (max-width: 992px) {
-    .dashboard-grid {
-      grid-template-columns: 1fr;
-    }
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--transition-fast);
+  }
+
+  .sidebar-item:hover, .sidebar-item.active {
+    color: var(--text-main);
+    background: rgba(255, 107, 53, 0.08);
+    border-left: 3px solid var(--primary-indigo);
+  }
+
+  /* Main Column Area */
+  .main-content-panel {
+    min-width: 0; /* Prevents flex items from overflowing */
   }
 
   .dashboard-section {
@@ -56,13 +103,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    font-size: 18px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 800;
     border-bottom: 1px solid var(--border-light);
     padding-bottom: 8px;
   }
 
-  /* Projects List Card */
+  /* Projects grid */
   .project-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -91,7 +139,7 @@
   .project-card:hover {
     transform: translateY(-2px);
     border-color: var(--primary-indigo);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.05);
   }
 
   .project-card-header {
@@ -102,27 +150,27 @@
   }
 
   .project-card-title {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
   }
 
   .project-card-desc {
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 20px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.5;
   }
 
-  /* Progress Bar */
   .progress-container {
     width: 100%;
     background: var(--bg-main);
     border-radius: var(--radius-round);
     height: 6px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     overflow: hidden;
   }
 
@@ -138,11 +186,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-light);
   }
 
-  /* Tasks List */
+  /* Tasks list */
   .task-list {
     display: flex;
     flex-direction: column;
@@ -172,11 +220,11 @@
 
   .task-title {
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .task-proj {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--text-muted);
   }
 
@@ -188,7 +236,7 @@
 
   /* Priority badges */
   .badge-prio {
-    font-size: 11px;
+    font-size: 10px;
     padding: 2px 8px;
   }
   .badge-low { background: rgba(16, 185, 129, 0.1); color: var(--status-success); }
@@ -196,7 +244,7 @@
   .badge-high { background: rgba(239, 68, 68, 0.1); color: var(--status-error); }
   .badge-urgent { background: rgba(239, 68, 68, 0.2); color: var(--status-error); border: 1px solid var(--status-error); }
 
-  /* Requests section */
+  /* Requests */
   .request-item {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
@@ -213,8 +261,8 @@
   }
 
   .request-avatar {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-round);
     object-fit: cover;
   }
@@ -225,21 +273,22 @@
 
   .request-user-name {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13.5px;
   }
 
   .request-user-role {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--text-muted);
   }
 
   .request-message {
-    font-size: 13px;
+    font-size: 12.5px;
     background: var(--bg-main);
-    padding: 10px;
+    padding: 8px 12px;
     border-radius: var(--radius-sm);
     color: var(--text-muted);
     margin-bottom: 12px;
+    border-left: 2px solid var(--primary-indigo);
   }
 
   .request-actions {
@@ -247,7 +296,109 @@
     gap: 8px;
   }
 
-  /* Global Search Results Page */
+  /* Right column drawer */
+  .right-column-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .panel-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+
+  .panel-card h3 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 8px;
+  }
+
+  /* Deadline list item */
+  .deadline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  }
+
+  .deadline-title {
+    font-weight: 600;
+    color: var(--text-main);
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deadline-date {
+    color: var(--status-error);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Recommended Teammates */
+  .rec-teammate {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .rec-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-round);
+    object-fit: cover;
+    border: 1.5px solid var(--primary-indigo);
+  }
+
+  .rec-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rec-name {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rec-college {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Tech Tag */
+  .tech-tag {
+    display: inline-block;
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--primary-purple);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-round);
+    margin: 4px;
+    transition: all var(--transition-fast);
+  }
+
+  .tech-tag:hover {
+    background: rgba(37, 99, 235, 0.15);
+    transform: translateY(-1px);
+  }
+
+  /* Global Search Results Panel */
   .search-results-wrapper {
     display: none;
   }
@@ -288,138 +439,181 @@
     padding: 40px 20px;
     color: var(--text-muted);
   }
-
-  .empty-state i {
-    font-size: 32px;
-    margin-bottom: 12px;
-    display: block;
-  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container dashboard-container">
-  <!-- Dynamic Search Results View -->
-  <div id="search-results-wrapper" class="search-results-wrapper">
-    <div class="dashboard-header">
-      <div class="dashboard-title">
-        <h1 id="search-query-title">Search Results</h1>
-        <p>Global search results from all projects, users, and tasks</p>
+<div class="container dashboard-grid-layout">
+  
+  <!-- Left Side: Sidebar Command Center -->
+  <aside class="left-sidebar-panel">
+    <div class="sidebar-menu">
+      <a href="{% url 'dashboard' %}" class="sidebar-item active" id="side-dashboard">
+        <span>🏠 Command Center</span>
+      </a>
+      <a href="{% url 'discover_developers' %}" class="sidebar-item" id="side-discover">
+        <span>👥 Discover Teams</span>
+      </a>
+      <a href="{% url 'home_feed' %}" class="sidebar-item" id="side-feed">
+        <span>📁 Projects Feed</span>
+      </a>
+      <a href="{% url 'home_feed' %}?filter=hackathon" class="sidebar-item" id="side-hackathons">
+        <span>🏆 Hackathons</span>
+      </a>
+      <a href="#my-assignments" class="sidebar-item" id="side-tasks" onclick="document.getElementById('my-assignments').scrollIntoView({behavior: 'smooth'})">
+        <span>📋 My Assignments</span>
+      </a>
+      <a href="{% url 'notifications_page' %}" class="sidebar-item" id="side-notifs">
+        <span>🔔 Notifications</span>
+      </a>
+      <a href="{% url 'profile_self' %}" class="sidebar-item" id="side-profile">
+        <span>👤 My Profile</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Center Content Stream: Main Area -->
+  <div class="main-content-panel">
+    <!-- Search Bar at the Top -->
+    <div style="margin-bottom: 28px;">
+      <input type="text" id="dashboard-search-input" class="form-input" placeholder="Search developers, project workspaces, tasks..." style="padding: 12px 18px; font-size: 15px; border-radius: var(--radius-md);" onkeydown="if(event.key === 'Enter') { triggerDashboardSearch(this.value); }">
+    </div>
+
+    <!-- Dynamic Search Results View -->
+    <div id="search-results-wrapper" class="search-results-wrapper">
+      <div class="dashboard-header" style="margin-bottom: 16px;">
+        <div class="dashboard-title">
+          <h1 id="search-query-title">Search Results</h1>
+          <p>Global matches in project workspaces, developers, and tasks</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary btn-sm" onclick="clearDashboardSearch()">Clear Search</button>
+        </div>
       </div>
-      <div>
-        <button class="btn btn-secondary" onclick="clearSearch()">Back to Dashboard</button>
+
+      <!-- Search Tabs -->
+      <div class="search-tabs">
+        <div class="search-tab active" onclick="switchSearchTab('projects')" id="tab-btn-projects">Projects (<span id="count-projects">0</span>)</div>
+        <div class="search-tab" onclick="switchSearchTab('users')" id="tab-btn-users">Developers (<span id="count-users">0</span>)</div>
+        <div class="search-tab" onclick="switchSearchTab('tasks')" id="tab-btn-tasks">Tasks (<span id="count-tasks">0</span>)</div>
+      </div>
+
+      <!-- Tab Contents -->
+      <div id="search-projects" class="search-results-section active">
+        <div class="project-grid" id="search-projects-grid"></div>
+        <div class="empty-state" id="search-projects-empty" style="display:none;">
+          <p>No projects found matching the query.</p>
+        </div>
+      </div>
+
+      <div id="search-users" class="search-results-section">
+        <div class="project-grid" id="search-users-grid"></div>
+        <div class="empty-state" id="search-users-empty" style="display:none;">
+          <p>No developers found matching the query.</p>
+        </div>
+      </div>
+
+      <div id="search-tasks" class="search-results-section">
+        <div class="task-list" id="search-tasks-list"></div>
+        <div class="empty-state" id="search-tasks-empty" style="display:none;">
+          <p>No tasks found matching the query.</p>
+        </div>
       </div>
     </div>
 
-    <!-- Search Tabs -->
-    <div class="search-tabs">
-      <div class="search-tab active" onclick="switchSearchTab('projects')" id="tab-btn-projects">Projects (<span id="count-projects">0</span>)</div>
-      <div class="search-tab" onclick="switchSearchTab('users')" id="tab-btn-users">Developers (<span id="count-users">0</span>)</div>
-      <div class="search-tab" onclick="switchSearchTab('tasks')" id="tab-btn-tasks">Tasks (<span id="count-tasks">0</span>)</div>
-    </div>
-
-    <!-- Tab Contents -->
-    <div id="search-projects" class="search-results-section active">
-      <div class="project-grid" id="search-projects-grid"></div>
-      <div class="empty-state" id="search-projects-empty" style="display:none;">
-        <p>No projects found matching the query.</p>
+    <!-- Standard Command Center View -->
+    <div id="standard-dashboard-view">
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <h1>Command Center</h1>
+          <p>Manage your workspaces, track task tickets, and accept team join applications</p>
+        </div>
+        <div class="quick-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openModal('create-task-modal')">Add Task</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('create-project-modal')">New Project</button>
+        </div>
       </div>
-    </div>
 
-    <div id="search-users" class="search-results-section">
-      <div class="project-grid" id="search-users-grid"></div>
-      <div class="empty-state" id="search-users-empty" style="display:none;">
-        <p>No developers found matching the query.</p>
+      <!-- Active Projects Workspace Grid -->
+      <div class="dashboard-section">
+        <div class="section-title">
+          <h2>Active Workspaces</h2>
+          <span style="font-size: 13px; color: var(--text-muted);" id="projects-count-badge">0 active</span>
+        </div>
+        <div class="project-grid" id="active-projects-container">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="empty-state" id="projects-empty-state" style="display:none;">
+          <p>No active project workspaces yet.</p>
+          <button class="btn btn-primary btn-sm" style="margin-top:12px;" onclick="openModal('create-project-modal')">Create Workspace</button>
+        </div>
       </div>
-    </div>
 
-    <div id="search-tasks" class="search-results-section">
-      <div class="task-list" id="search-tasks-list"></div>
-      <div class="empty-state" id="search-tasks-empty" style="display:none;">
-        <p>No tasks found matching the query.</p>
+      <!-- Join Requests Section -->
+      <div class="dashboard-section" id="join-requests-section" style="display:none;">
+        <div class="section-title">
+          <h2>Incoming Team Applications</h2>
+        </div>
+        <div id="requests-container">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Assigned Tasks Section -->
+      <div class="dashboard-section" id="my-assignments">
+        <div class="section-title">
+          <h2>My Assignments</h2>
+          <span style="font-size: 13px; color: var(--text-muted);" id="tasks-count-badge">0 pending</span>
+        </div>
+        <div class="task-list" id="my-tasks-container">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="empty-state" id="tasks-empty-state" style="display:none;">
+          <p>You have no pending assignments across your workspaces.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Standard Dashboard View -->
-  <div id="standard-dashboard-view">
-    <div class="dashboard-header">
-      <div class="dashboard-title">
-        <h1>Welcome back, {{ user.first_name|default:user.username }}</h1>
-        <p>Manage your active workspaces, track assignments, and view project updates</p>
+  <!-- Right Side: Deadlines, Recommendations, Trending Technologies -->
+  <aside class="right-column-panel">
+    <!-- Upcoming Deadlines -->
+    <div class="panel-card">
+      <h3>Upcoming Deadlines</h3>
+      <div id="deadlines-container">
+        <!-- Filled dynamically -->
       </div>
-      <div class="quick-actions">
-        <button class="btn btn-secondary btn-sm" onclick="openModal('create-task-modal')">Add Task</button>
-        <button class="btn btn-primary btn-sm" onclick="openModal('create-project-modal')">New Project</button>
+      <div id="deadlines-empty" style="display:none; font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">
+        No upcoming task deadlines.
+      </div>
+    </div>
+
+    <!-- Recommended Teammates -->
+    <div class="panel-card">
+      <h3>Recommended Partners</h3>
+      <div id="recommendations-container">
+        <!-- Filled dynamically -->
+      </div>
+      <div id="recommendations-empty" style="display:none; font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">
+        No recommendations available.
       </div>
     </div>
 
-    <div class="dashboard-grid">
-      <!-- Left Column: Active Projects -->
-      <div>
-        <div class="dashboard-section">
-          <div class="section-title">
-            <h2>Active Workspaces</h2>
-            <span style="font-size: 13px; color: var(--text-muted);" id="projects-count-badge">0 active</span>
-          </div>
-          <div class="project-grid" id="active-projects-container">
-            <!-- Dynamically populated -->
-          </div>
-          <div class="empty-state" id="projects-empty-state" style="display:none;">
-            <p>You don't have any active projects yet.</p>
-            <button class="btn btn-primary btn-sm" style="margin-top: 12px;" onclick="openModal('create-project-modal')">Create Your First Project</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: Tasks, Join Requests, Notifications -->
-      <div>
-        <!-- Tasks assigned to User -->
-        <div class="dashboard-section">
-          <div class="section-title">
-            <h2>Your Assignments</h2>
-            <span style="font-size: 13px; color: var(--text-muted);" id="tasks-count-badge">0 pending</span>
-          </div>
-          <div class="task-list" id="my-tasks-container">
-            <!-- Dynamically populated -->
-          </div>
-          <div class="empty-state" id="tasks-empty-state" style="display:none;">
-            <p>No pending tasks assigned to you.</p>
-          </div>
-        </div>
-
-        <!-- Team Join Requests Received -->
-        <div class="dashboard-section" id="join-requests-section" style="display:none;">
-          <div class="section-title">
-            <h2>Join Requests</h2>
-          </div>
-          <div id="requests-container">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- Recent Notifications -->
-        <div class="dashboard-section">
-          <div class="section-title">
-            <h2>Recent Updates</h2>
-          </div>
-          <div class="task-list" id="notifications-container">
-            <!-- Dynamically populated -->
-          </div>
-          <div class="empty-state" id="notifications-empty-state" style="display:none;">
-            <p>No new updates.</p>
-          </div>
-        </div>
+    <!-- Trending Technologies -->
+    <div class="panel-card">
+      <h3>Trending Technologies</h3>
+      <div id="trending-tech-container" style="margin: -4px;">
+        <!-- Filled dynamically -->
       </div>
     </div>
-  </div>
+  </aside>
 </div>
 
 <!-- Modal: Create Project -->
 <div class="modal-overlay" id="create-project-modal">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModal('create-project-modal')">&times;</button>
-    <h3 style="margin-bottom: 20px; font-size: 20px;">Create New Project</h3>
+    <h3 style="margin-bottom: 20px; font-size: 20px;">Create New Project Workspace</h3>
     <form id="create-project-form" onsubmit="handleCreateProject(event)">
       {% csrf_token %}
       <div class="form-group">

@@ -1,116 +1,295 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}CollabX - Connect. Collaborate. Create.{% endblock %}
+{% block title %}CollabX - Hackathons, Team Building and Project Collaboration{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/landing.css' %}">
 {% endblock %}
 
 {% block content %}
+<!-- Large Hero Banner Section -->
 <section class="hero-section">
   <div class="container">
     <div class="hero-badge">
-      <span>🚀</span> Phase 1 Core Active
+      <span>🚀</span> Energetic Innovation &amp; Open Source Platform
     </div>
     
     <h1 class="hero-title" id="landing-title">
-      Connect. Collaborate. <span>Create.</span>
+      Build Together.<br><span>Innovate Faster.</span>
     </h1>
     
     <p class="hero-subtitle" id="landing-subtitle">
-      The developer-centric social network for students, hackathon competitors, and innovators. Show off your skills, find teammates, and build great projects together.
+      Discover hackathons, find your dream project teammates, recruit skilled builders, and collaborate to turn ideas into real products.
     </p>
     
     <div class="hero-ctas">
-      <a href="{% url 'register' %}" class="btn btn-primary" id="btn-hero-start">Get Started Now</a>
-      <a href="{% url 'login' %}" class="btn btn-secondary" id="btn-hero-explore">Explore Home Feed</a>
+      <a href="{% url 'register' %}" class="btn btn-primary" id="btn-hero-start">Launch Your Team</a>
+      <a href="{% url 'discover_developers' %}" class="btn btn-secondary" id="btn-hero-explore">Browse Teammates</a>
     </div>
 
-    <!-- Visual Dashboard Preview Mockup -->
-    <div class="hero-visual">
-      <div class="preview-main-card">
-        <h3 style="margin-bottom: 20px; text-align: left; font-size: 20px;">Trending Recruitment Needs</h3>
+    <!-- Hackathon & Collaboration Vector Graphic -->
+    <div class="hero-visual-illustration">
+      <svg viewBox="0 0 800 350" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 650px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));">
+        <rect width="800" height="350" rx="20" fill="#131B31" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
         
-        <div class="preview-grid">
-          
-          <!-- Mock Project Recruitment Post -->
-          <div class="preview-post">
-            <div class="preview-post-header">
-              <span class="badge badge-recruitment">Project Recruitment</span>
-              <span style="font-size: 11px; color: var(--text-light);">2 hours ago</span>
-            </div>
-            <h4 class="preview-post-title">Need: 2 MERN Developers</h4>
-            <p class="preview-post-desc">
-              Building <strong>AI Resume Analyzer</strong> to automatically parse PDF resumes and rank them against jobs. Need frontend and database help.
-            </p>
-            <div class="preview-post-footer">
-              <div class="skills-list-preview">
-                <span class="badge badge-skill">React</span>
-                <span class="badge badge-skill">Node.js</span>
-                <span class="badge badge-skill">MongoDB</span>
-              </div>
-              <span>💬 8</span>
-            </div>
-          </div>
-          
-          <!-- Mock Hackathon Team Post -->
-          <div class="preview-post">
-            <div class="preview-post-header">
-              <span class="badge badge-hackathon">Hackathon Team</span>
-              <span style="font-size: 11px; color: var(--text-light);">5 hours ago</span>
-            </div>
-            <h4 class="preview-post-title">SIH Team Needed</h4>
-            <p class="preview-post-desc">
-              Forming a team for Smart India Hackathon under the Ministry of Education. Looking for a backend architect to build Django services.
-            </p>
-            <div class="preview-post-footer">
-              <div class="skills-list-preview">
-                <span class="badge badge-skill">Python</span>
-                <span class="badge badge-skill">Django</span>
-                <span class="badge badge-skill">PostgreSQL</span>
-              </div>
-              <span>💬 12</span>
-            </div>
-          </div>
-          
+        <!-- Grid Background Mockup -->
+        <path d="M 0,50 L 800,50 M 0,100 L 800,100 M 0,150 L 800,150 M 0,200 L 800,200 M 0,250 L 800,250 M 0,300 L 800,300" stroke="rgba(255,255,255,0.02)"/>
+        <path d="M 100,0 L 100,350 M 200,0 L 200,350 M 300,0 L 300,350 M 400,0 L 400,350 M 500,0 L 500,350 M 600,0 L 600,350 M 700,0 L 700,350" stroke="rgba(255,255,255,0.02)"/>
+        
+        <!-- Connection Network Paths -->
+        <path d="M 150,220 C 300,80 500,80 650,220" stroke="#ff6b35" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4" />
+        <path d="M 280,240 C 350,140 450,140 520,240" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4" />
+        
+        <!-- Central Hub Node (Idea/AI) -->
+        <circle cx="400" cy="110" r="32" fill="#1e293b" stroke="#ff6b35" stroke-width="3"/>
+        <!-- Lightbulb glow inside central node -->
+        <path d="M 400,95 L 400,125 M 385,110 L 415,110 M 390,100 L 410,120 M 390,120 L 410,100" stroke="#ff6b35" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="400" cy="110" r="14" fill="#ff6b35"/>
+        
+        <!-- Node 1: Front-end (React/UI) -->
+        <g transform="translate(150, 220)">
+          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#2563eb" stroke-width="2"/>
+          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">UI/UX</text>
+        </g>
+        
+        <!-- Node 2: Back-end (Django/Database) -->
+        <g transform="translate(280, 240)">
+          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">Python</text>
+        </g>
+
+        <!-- Node 3: AI Engine -->
+        <g transform="translate(520, 240)">
+          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#ff6b35" stroke-width="2"/>
+          <text x="0" y="5" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">AI/ML</text>
+        </g>
+
+        <!-- Node 4: Product Manager -->
+        <g transform="translate(650, 220)">
+          <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#2563eb" stroke-width="2"/>
+          <text x="0" y="5" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" font-weight="bold">PM</text>
+        </g>
+        
+        <!-- Collaborative Team Vectors (Mock avatars/avatars cards) -->
+        <rect x="310" y="25" width="180" height="40" rx="8" fill="#1e293b" stroke="rgba(255,255,255,0.06)" />
+        <circle cx="335" cy="45" r="12" fill="#ff6b35" />
+        <text x="335" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">A</text>
+        <circle cx="355" cy="45" r="12" fill="#2563eb" />
+        <text x="355" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">J</text>
+        <circle cx="375" cy="45" r="12" fill="#10b981" />
+        <text x="375" y="49" font-family="sans-serif" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">K</text>
+        <text x="435" y="49" font-family="sans-serif" font-size="12" fill="#94a3b8" font-weight="500">forming team...</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Community Statistics Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-num">1,000+</span>
+        <span class="stat-label">Collaborators</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">500+</span>
+        <span class="stat-label">Active Projects</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100+</span>
+        <span class="stat-label">Hackathons Supported</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">50+</span>
+        <span class="stat-label">Developer Skills</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trending Projects Section -->
+<section class="landing-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Trending <span>Recruitment Needs</span></h2>
+      <p class="section-subtitle">Real project workspaces looking for dev skills right now</p>
+    </div>
+    
+    <div class="landing-grid-3">
+      <!-- Project Card 1 -->
+      <div class="landing-card">
+        <span class="card-badge">HACKATHON TEAM</span>
+        <h3 class="card-title">AI Resume Parser</h3>
+        <p class="card-desc">Building a smart resume ranking service. We need a backend Django engineer to parse documents and index them in Postgres.</p>
+        <div style="margin-top: 20px; display: flex; gap: 6px;">
+          <span class="badge badge-skill" style="font-size: 10px;">Python</span>
+          <span class="badge badge-skill" style="font-size: 10px;">Django</span>
+          <span class="badge badge-skill" style="font-size: 10px;">PostgreSQL</span>
+        </div>
+      </div>
+      
+      <!-- Project Card 2 -->
+      <div class="landing-card">
+        <span class="card-badge" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">OPEN SOURCE</span>
+        <h3 class="card-title">Dev Workspace board</h3>
+        <p class="card-desc">React-based collaborative kanban board with real-time sync. Looking for a Frontend dev to build drag-and-drop mechanics.</p>
+        <div style="margin-top: 20px; display: flex; gap: 6px;">
+          <span class="badge badge-skill" style="font-size: 10px;">React</span>
+          <span class="badge badge-skill" style="font-size: 10px;">TypeScript</span>
+          <span class="badge badge-skill" style="font-size: 10px;">CSS Grid</span>
+        </div>
+      </div>
+      
+      <!-- Project Card 3 -->
+      <div class="landing-card">
+        <span class="card-badge">STUDENT INITIATIVE</span>
+        <h3 class="card-title">Mockup UI Generator</h3>
+        <p class="card-desc">AI-powered system generating UI elements from text descriptions. Seeking UI/UX designers to define core brand guidelines.</p>
+        <div style="margin-top: 20px; display: flex; gap: 6px;">
+          <span class="badge badge-skill" style="font-size: 10px;">Figma</span>
+          <span class="badge badge-skill" style="font-size: 10px;">CSS</span>
+          <span class="badge badge-skill" style="font-size: 10px;">Tailwind</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Features Grid -->
-<section id="features" class="features-section">
+<!-- Featured Developers Section -->
+<section class="landing-section" style="background: rgba(19, 27, 49, 0.3);">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Built for Hackers and Builders</h2>
-      <p class="section-desc">Traditional social media is noisy. CollabX is built specifically to connect developers and students to build real projects.</p>
+      <h2 class="section-title">Featured <span>Innovators</span></h2>
+      <p class="section-subtitle">Meet talented students, developers, and designers on CollabX</p>
     </div>
     
-    <div class="features-grid">
-      
-      <!-- Feature 1 -->
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <h3>Find Teammates</h3>
-        <p>Search other students and developers by specific skills, organization, or username. Inspect their past projects and social connections instantly.</p>
+    <div class="landing-grid-3">
+      <!-- Developer 1 -->
+      <div class="landing-card">
+        <div class="dev-avatar-row">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 1">
+          <div>
+            <div class="dev-name">Alex Dev</div>
+            <div class="dev-role">Full Stack Developer</div>
+          </div>
+        </div>
+        <p class="card-desc">"Love building automation scripts. Specializes in Django backend architecture and cloud deployment pipelines."</p>
+        <div style="margin-top: 16px;">
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Python</span>
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Postgres</span>
+          <span class="badge badge-skill" style="font-size: 9.5px;">Docker</span>
+        </div>
       </div>
-      
-      <!-- Feature 2 -->
-      <div class="feature-card">
-        <div class="feature-icon">👥</div>
-        <h3>Recruit for Teams</h3>
-        <p>Post open team needs for hackathons or side projects. Specify exactly what skills you are missing, and let matching developers comment and apply.</p>
+
+      <!-- Developer 2 -->
+      <div class="landing-card">
+        <div class="dev-avatar-row">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 2">
+          <div>
+            <div class="dev-name">Jane Designer</div>
+            <div class="dev-role">UI/UX Designer</div>
+          </div>
+        </div>
+        <p class="card-desc">"Crafting modern design layouts. Enjoys styling dashboards with glassmorphism overlays and CSS keyframe animations."</p>
+        <div style="margin-top: 16px;">
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">Figma</span>
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">CSS Grid</span>
+          <span class="badge badge-skill" style="font-size: 9.5px;">Prototyping</span>
+        </div>
       </div>
-      
-      <!-- Feature 3 -->
-      <div class="feature-card">
-        <div class="feature-icon">🐙</div>
-        <h3>GitHub Stats Sync</h3>
-        <p>Connect your GitHub account. Displays your public repository count, followers, and following directly on your profile card to establish immediate trust.</p>
+
+      <!-- Developer 3 -->
+      <div class="landing-card">
+        <div class="dev-avatar-row">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120" class="dev-avatar" alt="Dev 3">
+          <div>
+            <div class="dev-name">Koushik Butta</div>
+            <div class="dev-role">AI/ML Engineer</div>
+          </div>
+        </div>
+        <p class="card-desc">"Training deep learning setups. Interested in natural language processing models and web search tools optimizations."</p>
+        <div style="margin-top: 16px;">
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">PyTorch</span>
+          <span class="badge badge-skill" style="font-size: 9.5px; margin-right: 4px;">NLP</span>
+          <span class="badge badge-skill" style="font-size: 9.5px;">FastAPI</span>
+        </div>
       </div>
-      
+    </div>
+  </div>
+</section>
+
+<!-- Upcoming Hackathons Section -->
+<section class="landing-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming <span>Hackathons &amp; Events</span></h2>
+      <p class="section-subtitle">Find teammates and apply for active team recruitment events</p>
+    </div>
+    
+    <div class="landing-grid-2">
+      <!-- Hackathon 1 -->
+      <div class="landing-card" style="border-left: 4px solid var(--primary-indigo);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <h3 style="font-size: 20px; font-weight: 800;">Smart India Hackathon 2026</h3>
+          <span class="badge badge-skill" style="color:var(--accent-cyan); background:rgba(16, 185, 129, 0.1);">Registering</span>
+        </div>
+        <p class="card-desc">The premier national student innovation challenge. Form your teams on CollabX to address problem statements issued by government ministries.</p>
+        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: var(--text-light);">Starts: Oct 12, 2026</span>
+          <a href="{% url 'register' %}" class="btn btn-secondary btn-sm">Find Team</a>
+        </div>
+      </div>
+
+      <!-- Hackathon 2 -->
+      <div class="landing-card" style="border-left: 4px solid var(--primary-purple);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+          <h3 style="font-size: 20px; font-weight: 800;">Open Source Winter Build</h3>
+          <span class="badge badge-skill" style="color:var(--primary-indigo); background:rgba(255,107,53,0.1);">Coming Soon</span>
+        </div>
+        <p class="card-desc">A month-long virtual build sprint connecting global developers to open source projects. Join active workspace hubs and share scripts.</p>
+        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: var(--text-light);">Starts: Dec 01, 2026</span>
+          <a href="{% url 'register' %}" class="btn btn-secondary btn-sm">Find Team</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Success Stories Section -->
+<section class="landing-section" style="background: rgba(19, 27, 49, 0.3); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Developer <span>Success Stories</span></h2>
+      <p class="section-subtitle">Read how students built team sprint systems and won hackathons</p>
+    </div>
+    
+    <div class="landing-grid-2">
+      <!-- Success 1 -->
+      <div class="landing-card success-card">
+        <div>
+          <h3 class="card-title">First Place at NASA Space Apps</h3>
+          <p class="card-desc">A team of four strangers connected on CollabX, launched a dedicated project workspace, utilized the Kanban board sprint, and designed a web dashboard that won regional first place.</p>
+        </div>
+        <div class="success-quote">
+          "The workspace chat, file upload manager, and tasks tracking kept us sync'd through 48 hours of pure coding. CollabX is a hacker superpower."
+          <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--text-main);">— Rahul K., NASA Team Lead</div>
+        </div>
+      </div>
+
+      <!-- Success 2 -->
+      <div class="landing-card success-card">
+        <div>
+          <h3 class="card-title">From Side-Project to Seed Funding</h3>
+          <p class="card-desc">Two students looking for an AI/ML developer connected with a researcher on the discovery directory. They organized their project workspaces and successfully raised pre-seed incubation support.</p>
+        </div>
+        <div class="success-quote">
+          "We easily found developers filtering by specific AI skills. CollabX connects builders instantly based on trust."
+          <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: var(--text-main);">— Priya S., Co-founder</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

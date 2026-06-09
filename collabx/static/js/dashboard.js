@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchQ = urlParams.get('search');
     
     if (searchQ && searchQ.trim()) {
+        const input = document.getElementById('dashboard-search-input');
+        if (input) input.value = searchQ.trim();
         initiateGlobalSearch(searchQ.trim());
     } else {
         fetchDashboardData();
@@ -27,11 +29,105 @@ function fetchDashboardData() {
             renderJoinRequests(data.pending_requests_received || []);
             renderNotifications(data.notifications || []);
             populateProjectSelect(cachedProjects);
+            
+            // Phase 3 Command Center Right Panel
+            renderRightPanel(data.assigned_tasks || []);
         })
         .catch(err => {
             console.error('Error fetching dashboard data:', err);
             showToast('Failed to load dashboard data', 'error');
         });
+}
+
+function renderRightPanel(tasks) {
+    // 1. Render Deadlines
+    const deadlinesContainer = document.getElementById('deadlines-container');
+    const deadlinesEmpty = document.getElementById('deadlines-empty');
+    if (deadlinesContainer) {
+        deadlinesContainer.innerHTML = '';
+        const taskDeadlines = tasks.filter(t => t.due_date).sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+        if (taskDeadlines.length === 0) {
+            deadlinesEmpty.style.display = 'block';
+        } else {
+            deadlinesEmpty.style.display = 'none';
+            taskDeadlines.forEach(td => {
+                const item = document.createElement('div');
+                item.className = 'deadline-item';
+                item.innerHTML = `
+                    <span class="deadline-title">${escapeHTML(td.title)}</span>
+                    <span class="deadline-date">${escapeHTML(td.due_date)}</span>
+                `;
+                deadlinesContainer.appendChild(item);
+            });
+        }
+    }
+
+    // 2. Fetch Teammate Recommendations
+    const recContainer = document.getElementById('recommendations-container');
+    const recEmpty = document.getElementById('recommendations-empty');
+    if (recContainer) {
+        fetch('/api/social/suggestions/')
+            .then(res => res.json())
+            .then(data => {
+                recContainer.innerHTML = '';
+                const suggestions = data.suggestions || [];
+                if (suggestions.length === 0) {
+                    recEmpty.style.display = 'block';
+                } else {
+                    recEmpty.style.display = 'none';
+                    suggestions.forEach(s => {
+                        const item = document.createElement('div');
+                        item.className = 'rec-teammate';
+                        item.innerHTML = `
+                            <img src="${s.profile_picture}" alt="${s.username}" class="rec-avatar">
+                            <div class="rec-info">
+                                <div class="rec-name"><a href="/profile/${s.username}/" style="font-weight:600; hover:underline;">${escapeHTML(s.full_name || s.username)}</a></div>
+                                <div class="rec-college">${escapeHTML(s.college || 'Developer')}</div>
+                            </div>
+                        `;
+                        recContainer.appendChild(item);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                recEmpty.style.display = 'block';
+            });
+    }
+
+    // 3. Fetch Trending Tech (Skills)
+    const techContainer = document.getElementById('trending-tech-container');
+    if (techContainer) {
+        fetch('/api/social/trending-skills/')
+            .then(res => res.json())
+            .then(data => {
+                techContainer.innerHTML = '';
+                const skills = data.skills || [];
+                skills.forEach(skill => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tech-tag';
+                    tag.textContent = skill;
+                    tag.style.cursor = 'pointer';
+                    tag.onclick = () => {
+                        window.location.href = `/discover/?skill=${encodeURIComponent(skill)}`;
+                    };
+                    techContainer.appendChild(tag);
+                });
+            })
+            .catch(err => console.error(err));
+    }
+}
+
+function triggerDashboardSearch(query) {
+    if (!query || !query.trim()) return;
+    initiateGlobalSearch(query.trim());
+}
+
+function clearDashboardSearch() {
+    const input = document.getElementById('dashboard-search-input');
+    if (input) input.value = '';
+    document.getElementById('search-results-wrapper').style.display = 'none';
+    document.getElementById('standard-dashboard-view').style.display = 'block';
 }
 
 function renderProjects(projects) {
