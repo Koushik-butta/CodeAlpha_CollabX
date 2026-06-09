@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 import json
 
 class Profile(models.Model):
+    ROLE_CHOICES = (
+        ('frontend', 'Frontend Developer'),
+        ('backend', 'Backend Developer'),
+        ('fullstack', 'Full Stack Developer'),
+        ('uiux', 'UI/UX Designer'),
+        ('aiml', 'AI/ML Engineer'),
+        ('data', 'Data Analyst'),
+        ('mobile', 'Mobile Developer'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     full_name = models.CharField(max_length=150)
     bio = models.TextField(blank=True, default='')
@@ -10,6 +19,7 @@ class Profile(models.Model):
     college = models.CharField(max_length=250, blank=True, default='')
     github_link = models.URLField(max_length=300, blank=True, default='')
     linkedin_link = models.URLField(max_length=300, blank=True, default='')
+    portfolio_link = models.URLField(max_length=300, blank=True, default='')
     profile_picture = models.URLField(
         max_length=500, 
         default='https://res.cloudinary.com/dptujrmi1/image/upload/v1717838400/default-avatar.png'
@@ -19,6 +29,7 @@ class Profile(models.Model):
     github_followers = models.IntegerField(default=0)
     github_following = models.IntegerField(default=0)
     github_connected = models.BooleanField(default=False)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='fullstack')
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
@@ -30,7 +41,6 @@ class Profile(models.Model):
         try:
             return json.loads(self.skills)
         except Exception:
-            # Fallback if stored as comma-separated values
             return [s.strip() for s in self.skills.split(',') if s.strip()]
 
     @skills_list.setter
@@ -70,6 +80,74 @@ class Post(models.Model):
             self.skills = json.dumps(value)
         else:
             self.skills = json.dumps([])
+
+class Project(models.Model):
+    STATUS_CHOICES = (
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    )
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_projects')
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    skills = models.TextField(blank=True, default='[]') # JSON list of required skills
+    team_size = models.IntegerField(default=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    members = models.ManyToManyField(User, related_name='joined_projects', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def skills_list(self):
+        if not self.skills:
+            return []
+        try:
+            return json.loads(self.skills)
+        except Exception:
+            return [s.strip() for s in self.skills.split(',') if s.strip()]
+
+    @skills_list.setter
+    def skills_list(self, value):
+        if isinstance(value, list):
+            self.skills = json.dumps(value)
+        else:
+            self.skills = json.dumps([])
+
+class JoinRequest(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='join_requests')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='join_requests')
+    message = models.TextField(blank=True, default='')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'project')
+
+    def __str__(self):
+        return f"{self.user.username} request for {self.project.title} ({self.status})"
+
+class Notification(models.Model):
+    TYPE_CHOICES = (
+        ('join_request', 'New Join Request'),
+        ('accepted', 'Request Accepted'),
+        ('rejected', 'Request Rejected'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications') # Recipient
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    notification_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.user.username} ({self.notification_type})"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')

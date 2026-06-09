@@ -126,3 +126,28 @@ function formatRelativeTime(dateString) {
   
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
+
+// Auto-check notifications on load
+document.addEventListener('DOMContentLoaded', () => {
+  const badge = document.getElementById('navbar-notif-badge');
+  if (badge) {
+    updateNotificationBadge();
+    setInterval(updateNotificationBadge, 30000); // Check every 30 seconds
+  }
+});
+
+async function updateNotificationBadge() {
+  const badge = document.getElementById('navbar-notif-badge');
+  if (!badge) return;
+
+  const response = await apiRequest('/api/notifications/?unread_only=true');
+  if (!response.error && response.data) {
+    const unreadCount = response.data.unread_count || 0;
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from collabx.models import Profile, Post, Comment, Like, Follow
+from collabx.models import Profile, Post, Comment, Like, Follow, Project, JoinRequest, Notification
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -12,10 +12,24 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('post_type', 'created_at')
     search_fields = ('title', 'description', 'user__username')
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'created_at')
-    search_fields = ('content', 'user__username', 'post__title')
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'creator', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('title', 'description', 'creator__username')
 
+@admin.register(JoinRequest)
+class JoinRequestAdmin(admin.ModelAdmin):
+    list_display = ('user', 'project', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('user__username', 'project__title')
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'sender', 'notification_type', 'is_read', 'created_at')
+    list_filter = ('notification_type', 'is_read', 'created_at')
+    search_fields = ('user__username', 'sender__username')
+
+admin.site.register(Comment)
 admin.site.register(Like)
 admin.site.register(Follow)

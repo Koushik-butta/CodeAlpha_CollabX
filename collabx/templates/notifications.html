@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications - CollabX{% endblock %}
+
+{% block extra_css %}
+<style>
+  .notifications-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+  .notifications-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 32px;
+  }
+  .notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .notifications-title {
+    font-size: 24px;
+    font-weight: 800;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .notification-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+    position: relative;
+  }
+  .notification-item.unread {
+    border-left: 4px solid var(--primary-indigo);
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+  }
+  .notification-item:hover {
+    border-color: rgba(79, 70, 229, 0.15);
+  }
+
+  .notification-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .notification-text {
+    font-size: 14px;
+    color: var(--text-main);
+  }
+  .notification-text strong {
+    font-weight: 600;
+  }
+  .notification-project-link {
+    font-weight: 600;
+    color: var(--primary-indigo);
+  }
+  .notification-project-link:hover {
+    text-decoration: underline;
+  }
+
+  .notification-time {
+    font-size: 11.5px;
+    color: var(--text-light);
+  }
+
+  .btn-mark-single-read {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color var(--transition-fast);
+    padding: 4px;
+  }
+  .btn-mark-single-read:hover {
+    color: var(--primary-indigo);
+  }
+
+  .empty-notifs {
+    text-align: center;
+    padding: 40px 0;
+  }
+  .empty-notifs-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="notifications-wrapper">
+  <div class="card notifications-card">
+    <div class="notifications-header">
+      <h1 class="notifications-title">Notifications</h1>
+      <button class="btn btn-secondary btn-sm" id="btn-mark-all-read" style="display: none;">Mark All as Read</button>
+    </div>
+    
+    <div class="notifications-list" id="notifications-container">
+      <div class="empty-notifs">
+        <p class="empty-notifs-title">Loading notifications...</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/notifications.js' %}"></script>
+{% endblock %}

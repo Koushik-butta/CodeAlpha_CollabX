@@ -1,5 +1,5 @@
 from django.urls import path
-from collabx.views import pages, auth, profile, posts, social, search
+from collabx.views import pages, auth, profile, posts, social, search, projects, notifications, discovery
 
 urlpatterns = [
     # Page Views
@@ -12,6 +12,13 @@ urlpatterns = [
     path('post/create/', pages.create_post_page, name='create_post'),
     path('post/edit/<int:post_id>/', pages.create_post_page, name='edit_post'),
     path('post/<int:post_id>/', pages.post_detail_page, name='post_detail'),
+    
+    # Phase 2 Page Views
+    path('discover/', pages.discover_page, name='discover_developers'),
+    path('project/create/', pages.create_project_page, name='create_project'),
+    path('project/edit/<int:project_id>/', pages.create_project_page, name='edit_project'),
+    path('project/<int:project_id>/', pages.project_detail_page, name='project_detail'),
+    path('notifications/', pages.notifications_page, name='notifications_page'),
 
     # Auth API Endpoints
     path('api/auth/register/', auth.register_api, name='api_register'),
@@ -48,4 +55,20 @@ urlpatterns = [
     
     # Search API Endpoint
     path('api/search/', search.search_api, name='api_search'),
+    
+    # Phase 2 Projects API Endpoints
+    path('api/projects/', projects.get_projects_api, name='api_projects_list'),
+    path('api/projects/create/', projects.create_project_api, name='api_projects_create'),
+    path('api/projects/<int:project_id>/', projects.get_single_project_api, name='api_project_detail'),
+    path('api/projects/<int:project_id>/edit/', projects.edit_project_api, name='api_project_edit'),
+    path('api/projects/<int:project_id>/join/', projects.submit_join_request_api, name='api_project_join'),
+    path('api/projects/requests/<int:request_id>/handle/', projects.handle_join_request_api, name='api_project_handle_request'),
+    
+    # Phase 2 Notifications API Endpoints
+    path('api/notifications/', notifications.get_notifications_api, name='api_notifications_list'),
+    path('api/notifications/read/', notifications.mark_as_read_api, name='api_notifications_read_all'),
+    path('api/notifications/read/<int:notification_id>/', notifications.mark_as_read_api, name='api_notifications_read_single'),
+    
+    # Phase 2 Developers API Endpoints
+    path('api/developers/', discovery.get_developers_api, name='api_developers_list'),
 ]

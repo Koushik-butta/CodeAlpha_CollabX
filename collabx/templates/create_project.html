@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if project %}Edit Project{% else %}Create Project{% endif %} - CollabX{% endblock %}
+
+{% block extra_css %}
+<style>
+  .composer-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+  .composer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+  }
+  .composer-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="composer-wrapper">
+  <div class="composer-card">
+    <h1 class="composer-title" id="composer-header-title">
+      {% if project %}Edit Project Details{% else %}Start a New Collaboration Project{% endif %}
+    </h1>
+    
+    <form id="project-composer-form">
+      <!-- Project Title -->
+      <div class="form-group">
+        <label for="project-title" class="form-label">Project Title</label>
+        <input type="text" id="project-title" class="form-input" placeholder="e.g. AI Resume Parser / Decent Cart E-Commerce" value="{% if project %}{{ project.title }}{% endif %}" required>
+      </div>
+      
+      <!-- Project Description -->
+      <div class="form-group">
+        <label for="project-description" class="form-label">Detailed Project Description</label>
+        <textarea id="project-description" class="form-input" rows="6" placeholder="Describe your project, the objectives, current architecture, technology stack details, and what your team aims to build..." required>{% if project %}{{ project.description }}{% endif %}</textarea>
+      </div>
+      
+      <!-- Required Skills -->
+      <div class="form-group">
+        <label for="project-skills" class="form-label">Required Skills (Comma-separated)</label>
+        <input type="text" id="project-skills" class="form-input" placeholder="e.g. React, Node.js, Python, PostgreSQL" value="{% for s in project.skills_list %}{{ s }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <!-- Team Size -->
+        <div class="form-group">
+          <label for="project-team-size" class="form-label">Desired Team Size</label>
+          <input type="number" id="project-team-size" class="form-input" min="2" max="20" value="{% if project %}{{ project.team_size }}{% else %}4{% endif %}" required>
+        </div>
+        
+        <!-- Status -->
+        <div class="form-group">
+          <label for="project-status" class="form-label">Status</label>
+          <select id="project-status" class="form-input" style="height: 48px; padding: 10px 16px;">
+            <option value="open" {% if not project or project.status == 'open' %}selected{% endif %}>Open (Recruiting)</option>
+            <option value="in_progress" {% if project.status == 'in_progress' %}selected{% endif %}>In Progress (Building)</option>
+            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>Completed (Finished)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 16px; margin-top: 32px;">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()" style="flex: 1;">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="flex: 2;" id="btn-project-submit">
+          {% if project %}Save Changes{% else %}Create Project{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Expose project ID if editing
+  const EDITING_PROJECT_ID = {% if project %}{{ project.id }}{% else %}null{% endif %};
+</script>
+<script src="{% static 'js/create-project.js' %}"></script>
+{% endblock %}
