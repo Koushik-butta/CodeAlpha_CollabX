@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 import json
 import requests
 import cloudinary.uploader
@@ -155,10 +156,13 @@ def upload_avatar_api(request):
             
         img_file = request.FILES['profile_picture']
         
+        # Get prefix from settings
+        prefix = getattr(settings, 'CLOUDINARY_STORAGE', {}).get('PREFIX', 'collabx')
+
         # Upload to Cloudinary
         upload_result = cloudinary.uploader.upload(
             img_file,
-            folder="collabx/avatars",
+            folder=f"{prefix}/avatars",
             transformation=[
                 {"width": 300, "height": 300, "crop": "fill", "gravity": "face"}
             ]
